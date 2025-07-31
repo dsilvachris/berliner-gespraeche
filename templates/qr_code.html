@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="progress">
+    <div class="progress-bar" style="width: 70%;"></div>
+</div>
+
+<div class="card" style="text-align: center;">
+    <h1>QR-Code generiert!</h1>
+    
+    <div style="margin: 30px 0;">
+        <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" style="max-width: 300px; border: 2px solid #ddd; border-radius: 10px;">
+    </div>
+    
+    <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: left;">
+        <h3>📍 Bezirk: {{ district }}</h3>
+        
+        <h3>🏷️ Interessensbereiche:</h3>
+        <ul style="margin: 15px 0; padding-left: 20px;">
+            {% for type in initiative_types %}
+            <li style="margin: 8px 0;">{{ type }}</li>
+            {% endfor %}
+        </ul>
+        
+        {% if selected_initiatives %}
+        <h3>✅ Ausgewählte Initiativen:</h3>
+        <ul style="margin: 15px 0; padding-left: 20px;">
+            {% for initiative in selected_initiatives %}
+            <li style="margin: 8px 0;">{{ initiative }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        
+        <div style="margin-top: 20px;">
+            <strong>📞 Klimaneustart Kontakt:</strong>
+            <p>📧 Email: info@klimaneustart.de</p>
+            <p>📱 WhatsApp: +49 30 12345678</p>
+            <p>🌐 Website: www.klimaneustart.de</p>
+        </div>
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <a href="{{ url_for('step4') }}" class="btn">Weiter zu Kontakt & Einverständnis →</a>
+    </div>
+</div>
+{% endblock %}

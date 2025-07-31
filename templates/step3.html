@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="progress">
+    <div class="progress-bar" style="width: 60%;"></div>
+</div>
+
+<div class="card">
+    <h1>Schritt 3: Initiative auswählen</h1>
+    <p style="color: #666; margin-bottom: 30px;">Bezirk: <strong>{{ district or 'Nicht ausgewählt' }}</strong></p>
+    
+    <form method="POST" action="{{ url_for('step3') }}">
+        <h3>3.1 Interessensbereiche auswählen:</h3>
+        <div class="checkbox-group">
+            <div class="topic-card" onclick="toggleInitiativeType(this)">
+                <input type="checkbox" name="initiative_types" value="Urban Garden" style="display: none;">
+                <strong>🌱 Urban Garden</strong>
+            </div>
+            <div class="topic-card" onclick="toggleInitiativeType(this)">
+                <input type="checkbox" name="initiative_types" value="Repair Café" style="display: none;">
+                <strong>🔧 Repair Café</strong>
+            </div>
+            <div class="topic-card" onclick="toggleInitiativeType(this)">
+                <input type="checkbox" name="initiative_types" value="Climate Education" style="display: none;">
+                <strong>📚 Climate Education</strong>
+            </div>
+            <div class="topic-card" onclick="toggleInitiativeType(this)">
+                <input type="checkbox" name="initiative_types" value="Policy Advocacy" style="display: none;">
+                <strong>🏛️ Policy Advocacy</strong>
+            </div>
+            <div class="topic-card" onclick="toggleInitiativeType(this)">
+                <input type="checkbox" name="initiative_types" value="Mutual Aid" style="display: none;">
+                <strong>🤝 Mutual Aid</strong>
+            </div>
+            <div class="topic-card" onclick="toggleInitiativeType(this)">
+                <input type="checkbox" name="initiative_types" value="Digital Inclusion" style="display: none;">
+                <strong>💻 Digital Inclusion</strong>
+            </div>
+        </div>
+        
+        <div id="initiatives-section" style="margin-top: 40px; display: none;">
+            <h3>3.2 Lokale Initiativen in {{ district }}:</h3>
+            <div id="initiatives-list" style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <!-- Initiatives will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <button type="submit" name="show_qr" class="btn" id="show-qr-btn" disabled style="background: #FF9800;">Show QR</button>
+        </div>
+    </form>
+</div>
+
+<script>
+const initiativesData = {{ initiatives_data|tojson }};
+const district = '{{ district }}';
+
+function toggleInitiativeType(element) {
+    element.classList.toggle('selected');
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    updateInitiativesList();
+    updateQRButton();
+}
+
+function updateInitiativesList() {
+    const selectedTypes = Array.from(document.querySelectorAll('input[name="initiative_types"]:checked'))
+        .map(input => input.value);
+    
+    const initiativesSection = document.getElementById('initiatives-section');
+    const initiativesList = document.getElementById('initiatives-list');
+    
+    if (selectedTypes.length === 0 || !district || !initiativesData[district]) {
+        initiativesSection.style.display = 'none';
+        return;
+    }
+    
+    initiativesSection.style.display = 'block';
+    initiativesList.innerHTML = '';
+    
+    selectedTypes.forEach(type => {
+        if (initiativesData[district][type]) {
+            const typeDiv = document.createElement('div');
+            typeDiv.style.marginBottom = '20px';
+            typeDiv.innerHTML = `<h4 style="margin-bottom: 10px;">${getTypeIcon(type)} ${type}</h4>`;
+            
+            Object.keys(initiativesData[district][type]).forEach(initiative => {
+                const initiativeDiv = document.createElement('div');
+                initiativeDiv.style.cssText = 'margin: 10px 0; padding: 15px; background: white; border-radius: 8px; cursor: pointer; border: 2px solid transparent;';
+                initiativeDiv.onclick = () => toggleInitiative(initiativeDiv);
+                
+                initiativeDiv.innerHTML = `
+                    <input type="checkbox" name="selected_initiatives" value="${initiative}" style="display: none;">
+                    <strong>${initiative}</strong>
+                    <p style="margin: 5px 0; color: #666;">Initiative in ${district}</p>
+                `;
+                
+                typeDiv.appendChild(initiativeDiv);
+            });
+            
+            initiativesList.appendChild(typeDiv);
+        }
+    });
+}
+
+function toggleInitiative(element) {
+    element.classList.toggle('selected-initiative');
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    
+    if (checkbox.checked) {
+        element.style.border = '2px solid #4CAF50';
+        element.style.background = '#e8f5e8';
+    } else {
+        element.style.border = '2px solid transparent';
+        element.style.background = 'white';
+    }
+    
+    updateQRButton();
+}
+
+function updateQRButton() {
+    const selectedTypes = document.querySelectorAll('input[name="initiative_types"]:checked').length;
+    const showQrBtn = document.getElementById('show-qr-btn');
+    if (showQrBtn) showQrBtn.disabled = selectedTypes === 0;
+}
+
+function getTypeIcon(type) {
+    const icons = {
+        'Urban Garden': '🌱',
+        'Repair Café': '🔧',
+        'Climate Education': '📚',
+        'Policy Advocacy': '🏛️',
+        'Mutual Aid': '🤝',
+        'Digital Inclusion': '💻'
+    };
+    return icons[type] || '📋';
+}
+</script>
+{% endblock %}

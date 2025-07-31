@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="text-align: center;">
+    <h1>🏙️ Hallo Berliners! 🏙️</h1>
+    <div style="margin: 40px 0;">
+        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzY2N2VlYSIvPgogIDx0ZXh0IHg9IjEwMCIgeT0iNTUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkJlcmxpbjwvdGV4dD4KPC9zdmc+" alt="Berlin" style="border-radius: 10px; margin: 20px;">
+    </div>
+    
+    <div style="font-size: 24px; margin: 30px 0; color: #333;">
+        <p style="margin: 15px 0;">🌱 Klimaneustart Dialog Tool</p>
+        <p style="margin: 15px 0;">💬 Gespräche für eine lebenswerte Stadt</p>
+        <p style="margin: 15px 0;">🤝 Bürgerdialog & Klimaschutz</p>
+    </div>
+    
+    <div style="margin: 40px 0;">
+        <h2>Berliner Gespräche</h2>
+        <p style="font-size: 18px; color: #666; margin: 20px 0;">
+            Dokumentiere Gespräche zwischen Bürgern und Facilitatoren über die Verbesserung der Lebensqualität in Berlin.
+        </p>
+    </div>
+    
+    <a href="{{ url_for('start_dialogue') }}" class="btn" style="font-size: 20px; padding: 15px 30px;">
+        🚀 Dialog starten
+    </a>
+</div>
+
+<div class="card" style="text-align: center;">
+    <h3>Für Notiz-Macher</h3>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+        📊 Dashboard anzeigen
+    </a>
+</div>
+{% endblock %}

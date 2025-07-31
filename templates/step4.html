@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="progress">
+    <div class="progress-bar" style="width: 80%;"></div>
+</div>
+
+<div class="card">
+    <h1>Schritt 4: Kontakt & Einverständnis</h1>
+    
+    <form method="POST" action="{{ url_for('step4') }}">
+        <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <h3>🔒 Datenschutz</h3>
+            <p>Alle Daten sind privat und werden ausschließlich für die Kommunikation mit Initiativen verwendet.</p>
+            <p><strong>Du hast die volle Kontrolle über deine Daten.</strong></p>
+        </div>
+        
+        <h3>Einverständnis für Nachfrage:</h3>
+        <div style="margin: 20px 0;">
+            <label for="email">📧 Email (optional):</label>
+            <input type="email" id="email" name="email" placeholder="deine@email.de">
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <label for="phone">📱 Telefon (optional):</label>
+            <input type="tel" id="phone" name="phone" placeholder="+49 123 456 789">
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <label>
+                <input type="checkbox" name="consent" value="yes" style="width: auto; margin-right: 10px;">
+                Ich bin einverstanden, dass meine Kontaktdaten für die Kommunikation mit den ausgewählten Initiativen verwendet werden.
+            </label>
+        </div>
+        
+        <h3>Datenschutz-Optionen:</h3>
+        <div style="margin: 20px 0;">
+            <label>
+                <input type="radio" name="data_protection" value="full" style="width: auto; margin-right: 10px;">
+                Vollständigen Dialog speichern
+            </label>
+        </div>
+        <div style="margin: 20px 0;">
+            <label>
+                <input type="radio" name="data_protection" value="anonymous" style="width: auto; margin-right: 10px;" checked>
+                Nur anonyme Metadaten speichern
+            </label>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <button type="submit" class="btn" style="margin-right: 15px;">Weiter zur Reflexion →</button>
+            <a href="{{ url_for('generate_qr') }}" class="btn" style="background: #4CAF50;">Master QR-Code anzeigen</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

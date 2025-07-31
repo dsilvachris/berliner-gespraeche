@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="progress">
+    <div class="progress-bar" style="width: 40%;"></div>
+</div>
+
+<div class="card">
+    <h1>Schritt 2: Diskutierte Themen</h1>
+    
+    <form method="POST" action="{{ url_for('step2') }}">
+        <h3>Hauptthemen (mehrere auswählbar):</h3>
+        <div class="checkbox-group">
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Wohnen/Bauwende" style="display: none;">
+                <strong>🏠 Wohnen/Bauwende</strong>
+            </div>
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Mobilität" style="display: none;">
+                <strong>🚲 Mobilität</strong>
+            </div>
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Klimaanpassung" style="display: none;">
+                <strong>🌡️ Klimaanpassung</strong>
+            </div>
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Food" style="display: none;">
+                <strong>🍎 Food</strong>
+            </div>
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Building Transition" style="display: none;">
+                <strong>🔨 Building Transition</strong>
+            </div>
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Heating Transition" style="display: none;">
+                <strong>🔥 Heating Transition</strong>
+            </div>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <label for="notes"><strong>Meine Notizen:</strong></label>
+            <textarea id="notes" name="notes" rows="3" maxlength="100" placeholder="Kurze Notizen zum Gespräch..."></textarea>
+            <small style="color: #666;">Maximal 100 Zeichen</small>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <label for="district"><strong>Bezirk:</strong></label>
+            <select id="district" name="district" required>
+                <option value="">Bezirk auswählen</option>
+                <option value="Mitte">Mitte</option>
+                <option value="Neukölln">Neukölln</option>
+                <option value="Kreuzberg">Kreuzberg</option>
+                <option value="Prenzlauer Berg">Prenzlauer Berg</option>
+                <option value="Charlottenburg">Charlottenburg</option>
+                <option value="Friedrichshain">Friedrichshain</option>
+                <option value="Schöneberg">Schöneberg</option>
+                <option value="Wedding">Wedding</option>
+                <option value="Tempelhof">Tempelhof</option>
+                <option value="Steglitz">Steglitz</option>
+            </select>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <button type="submit" class="btn" id="continueBtn" disabled>Weiter →</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function checkFormValid() {
+    const topics = document.querySelectorAll('input[name="topics"]:checked');
+    const district = document.getElementById('district').value;
+    const notes = document.getElementById('notes').value;
+    
+    const continueBtn = document.getElementById('continueBtn');
+    continueBtn.disabled = !(topics.length > 0 || notes.trim() || district);
+}
+
+function toggleTopic(element) {
+    element.classList.toggle('selected');
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    checkFormValid();
+}
+
+document.querySelectorAll('input[name="topics"]').forEach(input => {
+    input.addEventListener('change', checkFormValid);
+});
+
+document.getElementById('district').addEventListener('change', checkFormValid);
+document.getElementById('notes').addEventListener('input', checkFormValid);
+
+document.getElementById('notes').addEventListener('input', function() {
+    const remaining = this.maxLength - this.value.length;
+    const small = this.nextElementSibling;
+    small.textContent = `${remaining} Zeichen übrig`;
+    if (remaining < 20) small.style.color = '#f44336';
+    else small.style.color = '#666';
+});
+</script>
+{% endblock %}
