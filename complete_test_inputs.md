@@ -192,18 +192,134 @@ Interesse an politischem Engagement und digitaler Teilhabe für Senioren.
 
 ---
 
+## Test Scenario 6: Environmental Activist
+
+### Schritt 1
+**Lebenswerte Stadt:**
+```
+Eine lebenswerte Stadt ist für mich eine, die im Einklang mit der Natur steht. Viele Bäume, saubere Gewässer, Wildtiere in der Stadt und Null-Emissions-Zonen. Außerdem sollten alle Dächer begrünt sein und es sollte überall Platz für Urban Farming geben.
+```
+
+**Dialogpartner-Interesse:**
+```
+Meine Gesprächspartnerin ist Lehrerin und möchte ihre Schüler für Umweltthemen begeistern. Sie sucht nach praktischen Projekten, die sie mit ihrer Klasse umsetzen kann, besonders im Bereich Müllvermeidung und Energiesparen.
+```
+
+### Schritt 2
+- **Themen**: Klimaanpassung + Building Transition + Food
+- **Notizen**: `Lehrerin mit 25 Schülern, 5. Klasse, sehr motiviert`
+- **Bezirk**: Mitte
+
+### Schritt 3
+- **Interessensbereiche**: Climate Education + Urban Garden + Policy Advocacy
+- **Verfügbare Initiativen**:
+  - Climate Education: Klimawerkstatt Berlin, BUND Umweltbildung
+  - Urban Garden: Prinzessinnengarten, Gemeinschaftsgarten Wedding
+  - Policy Advocacy: Klimaneustart Berlin, Changing Cities
+- **Auswahl**: Klimawerkstatt Berlin + Prinzessinnengarten + Klimaneustart Berlin
+
+### Schritt 4
+- **Email**: `sabine.umwelt@schule-berlin.de`
+- **Telefon**: `+49 30 98765432`
+- **Einverständnis**: ✅ Ja
+- **Datenschutz**: Vollständigen Dialog speichern
+
+### Schritt 5
+- **Reflexion**: `Als Umweltaktivistin freue ich mich sehr, dass auch Lehrer wie meine Gesprächspartnerin das Thema ernst nehmen. Kinder sind unsere Zukunft und wenn wir sie früh sensibilisieren, können wir wirklich etwas bewegen.`
+- **Anzahl Personen**: 2
+- **Dauer**: 40 Minuten
+
+---
+
+## Test Scenario 7: Senior Citizen
+
+### Schritt 1
+**Lebenswerte Stadt:**
+```
+In meinem Alter brauche ich eine Stadt mit guten öffentlichen Verkehrsmitteln, vielen Bänken zum Ausruhen und barrierefreien Zugängen. Wichtig sind auch Begegnungsstätten für Senioren und bezahlbare Gesundheitsversorgung in der Nähe.
+```
+
+**Dialogpartner-Interesse:**
+```
+Der junge Mann interessiert sich dafür, wie ältere Menschen digitale Technologien nutzen können. Er möchte ein Projekt starten, um Senioren bei der Nutzung von Smartphones und Internet zu helfen.
+```
+
+### Schritt 2
+- **Themen**: Mobilität + Wohnen/Bauwende
+- **Notizen**: `Sehr netter junger Mann, Student der Informatik`
+- **Bezirk**: Charlottenburg
+
+### Schritt 3
+- **Interessensbereiche**: Digital Inclusion + Mutual Aid
+- **Verfügbare Initiativen**:
+  - Digital Inclusion: Charlottenburg Digital Hub, Tech for All Charlottenburg
+  - Mutual Aid: Charlottenburg Solidarity, Community Care Charlottenburg
+- **Auswahl**: Tech for All Charlottenburg + Community Care Charlottenburg
+
+### Schritt 4
+- **Email**: `gertrud.mueller@email.de`
+- **Telefon**: `+49 30 55443322`
+- **Einverständnis**: ✅ Ja
+- **Datenschutz**: Nur anonyme Metadaten speichern
+
+### Schritt 5
+- **Reflexion**: `Es war sehr schön zu sehen, wie sich junge Menschen für uns Ältere einsetzen. Ich habe selbst Schwierigkeiten mit dem Internet und würde gerne lernen, wie ich mit meinen Enkeln über WhatsApp schreiben kann.`
+- **Anzahl Personen**: 2
+- **Dauer**: 30 Minuten
+
+---
+
+## Test Scenario 8: Young Family
+
+### Schritt 1
+**Lebenswerte Stadt:**
+```
+Als Familie mit zwei kleinen Kindern wünschen wir uns sichere Spielplätze, autofreie Straßen vor Schulen und Kitas, sowie viele Grünflächen. Auch wichtig: bezahlbare Wohnungen und gute Kinderbetreuung in der Nähe.
+```
+
+**Dialogpartner-Interesse:**
+```
+Das Paar möchte nachhaltiger leben und sucht nach Möglichkeiten, Lebensmittel regional zu kaufen und Müll zu reduzieren. Sie interessieren sich auch für Gemeinschaftsgärten, wo ihre Kinder lernen können, wo Essen herkommt.
+```
+
+### Schritt 2
+- **Themen**: Food + Wohnen/Bauwende + Mobilität
+- **Notizen**: `Familie mit 3-jährigem und 6-jährigem Kind`
+- **Bezirk**: Prenzlauer Berg
+
+### Schritt 3
+- **Interessensbereiche**: Urban Garden + Repair Café + Mutual Aid
+- **Verfügbare Initiativen**:
+  - Urban Garden: Prenzlauer Berg Community Garden, Prenzlauer Berg Green Space
+  - Repair Café: Repair Café Prenzlauer Berg, Prenzlauer Berg Fix Workshop
+  - Mutual Aid: Prenzlauer Berg Solidarity, Community Care Prenzlauer Berg
+- **Auswahl**: Prenzlauer Berg Community Garden + Repair Café Prenzlauer Berg + Community Care Prenzlauer Berg
+
+### Schritt 4
+- **Email**: `familie.schmidt@email.de`
+- **Telefon**: `+49 30 77889900`
+- **Einverständnis**: ✅ Ja
+- **Datenschutz**: Vollständigen Dialog speichern
+
+### Schritt 5
+- **Reflexion**: `Wir sind begeistert von den vielen Möglichkeiten in unserem Kiez! Besonders der Gemeinschaftsgarten klingt toll für unsere Kinder. Es ist schön zu wissen, dass es so viele Menschen gibt, die sich für eine bessere Zukunft einsetzen.`
+- **Anzahl Personen**: 3
+- **Dauer**: 35 Minuten
+
+---
+
 ## Quick Test Inputs
 
-### Minimal Test (5 minutes)
-- **Schritt 1**: Kurze Antworten (1-2 Sätze)
-- **Schritt 2**: 1 Thema + Bezirk Mitte
-- **Schritt 3**: 1 Interessensbereich (Urban Garden)
-- **Schritt 4**: Nur Email, keine Telefonnummer
-- **Schritt 5**: Kurze Reflexion, 1 Person, 10 Minuten
+### Minimal Test (Kreuzberg)
+- **Schritt 1**: Kurze Antworten (je 1 Satz)
+- **Schritt 2**: Nur "Food" + Bezirk Kreuzberg
+- **Schritt 3**: Urban Garden → Kreuzberg Community Garden
+- **Schritt 4**: Nur Email: `test@email.de`
+- **Schritt 5**: `Interessant.` + 1 Person + 5 Minuten
 
-### Maximum Test (Full Features)
-- **Schritt 1**: Lange, detaillierte Antworten (bis 2000 Zeichen)
-- **Schritt 2**: Alle 6 Themen + Notizen + Bezirk
-- **Schritt 3**: Alle 6 Interessensbereiche + mehrere Initiativen
-- **Schritt 4**: Vollständige Kontaktdaten + Vollständigen Dialog speichern
-- **Schritt 5**: Ausführliche Reflexion, 5 Personen, 60 Minuten
+### Maximum Test (Neukölln)
+- **Schritt 1**: Sehr lange Texte (fast 2000 Zeichen)
+- **Schritt 2**: Alle 6 Themen + ausführliche Notizen
+- **Schritt 3**: Alle 6 Interessensbereiche + viele Initiativen
+- **Schritt 4**: Vollständige Daten + Vollständigen Dialog speichern
+- **Schritt 5**: Sehr ausführliche Reflexion + 8 Personen + 90 Minuten
