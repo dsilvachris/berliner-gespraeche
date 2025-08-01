@@ -1,4 +1,4 @@
-# Berliner Gespräche - Sample Inputs
+# Sag doch mal, Berlin - Sample Inputs
 
 ## Schritt 1: Dialog-Essenz erfassen
 

@@ -1,4 +1,5 @@
-# Berliner Gespräche - Klimaneustart Dialog Tool
+# Sag doch mal, Berlin - Hören. Reden. Mitgestalten
+## Klimaneustart Dialog Tool
 
 Ein mobiles/web-basiertes Tool zur Dokumentation von Gesprächen zwischen Bürgern und Facilitatoren über die Verbesserung der Lebensqualität in Berlin.
 

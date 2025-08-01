@@ -488,7 +488,7 @@ def download_dialogue_pdf():
     
     # Title
     title_style = ParagraphStyle('CustomTitle', parent=styles['Heading1'], fontSize=18, spaceAfter=30)
-    story.append(Paragraph("Berliner Gespräche - Dialog Zusammenfassung", title_style))
+    story.append(Paragraph("Sag doch mal, Berlin - Dialog Zusammenfassung", title_style))
     story.append(Spacer(1, 12))
     
     # Dialogue details

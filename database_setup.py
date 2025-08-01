@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Database setup script for Berliner Gespräche
+Database setup script for Sag doch mal, Berlin
 Run this script to create the SQLite database and tables
 """
 
