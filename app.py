@@ -8,6 +8,10 @@ import json
 import os
 import pandas as pd
 import tempfile
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
 
 app = Flask(__name__)
 app.secret_key = 'berliner_gespraeche_secret_key'
@@ -360,7 +364,11 @@ def complete_dialogue():
     db.session.add(dialogue)
     db.session.commit()
     
+    # Store dialogue ID for PDF download
+    dialogue_id = dialogue.id
     session.clear()
+    session['last_dialogue_id'] = dialogue_id
+    
     return render_template('thank_you.html')
 
 @app.route('/dashboard')
@@ -463,6 +471,79 @@ def export_csv():
     response.headers['Content-Disposition'] = f'attachment; filename=berliner_gespraeche_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
     
     return response
+
+@app.route('/download_dialogue_pdf')
+def download_dialogue_pdf():
+    dialogue_id = session.get('last_dialogue_id')
+    if not dialogue_id:
+        return redirect(url_for('index'))
+    
+    dialogue = Dialogue.query.get_or_404(dialogue_id)
+    
+    # Create PDF
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    styles = getSampleStyleSheet()
+    story = []
+    
+    # Title
+    title_style = ParagraphStyle('CustomTitle', parent=styles['Heading1'], fontSize=18, spaceAfter=30)
+    story.append(Paragraph("Berliner Gespräche - Dialog Zusammenfassung", title_style))
+    story.append(Spacer(1, 12))
+    
+    # Dialogue details
+    story.append(Paragraph(f"<b>Datum:</b> {dialogue.timestamp.strftime('%d.%m.%Y %H:%M')}", styles['Normal']))
+    story.append(Paragraph(f"<b>Bezirk:</b> {dialogue.district or 'Nicht angegeben'}", styles['Normal']))
+    story.append(Paragraph(f"<b>Anzahl Personen:</b> {dialogue.num_people}", styles['Normal']))
+    story.append(Paragraph(f"<b>Dauer:</b> {dialogue.duration} Minuten", styles['Normal']))
+    story.append(Spacer(1, 20))
+    
+    # Step 1
+    story.append(Paragraph("<b>1. Lebenswerte Stadt:</b>", styles['Heading2']))
+    story.append(Paragraph(dialogue.livable_city or 'Keine Angabe', styles['Normal']))
+    story.append(Spacer(1, 12))
+    
+    story.append(Paragraph("<b>Dialogpartner Interesse:</b>", styles['Heading2']))
+    story.append(Paragraph(dialogue.partner_interest or 'Keine Angabe', styles['Normal']))
+    story.append(Spacer(1, 20))
+    
+    # Step 2
+    story.append(Paragraph("<b>2. Diskutierte Themen:</b>", styles['Heading2']))
+    topics_text = ', '.join(dialogue.topics) if dialogue.topics else 'Keine Themen ausgewählt'
+    story.append(Paragraph(topics_text, styles['Normal']))
+    if dialogue.notes:
+        story.append(Paragraph(f"<b>Notizen:</b> {dialogue.notes}", styles['Normal']))
+    story.append(Spacer(1, 20))
+    
+    # Step 3
+    story.append(Paragraph("<b>3. Ausgewählte Initiativen:</b>", styles['Heading2']))
+    initiatives_text = ', '.join(dialogue.initiatives) if dialogue.initiatives else 'Keine Initiativen ausgewählt'
+    story.append(Paragraph(initiatives_text, styles['Normal']))
+    story.append(Spacer(1, 20))
+    
+    # Step 5
+    if dialogue.reflection:
+        story.append(Paragraph("<b>4. Reflexion:</b>", styles['Heading2']))
+        story.append(Paragraph(dialogue.reflection, styles['Normal']))
+        story.append(Spacer(1, 20))
+    
+    # Contact info (if consent given)
+    if dialogue.consent == 'yes':
+        story.append(Paragraph("<b>Kontaktdaten:</b>", styles['Heading2']))
+        if dialogue.email:
+            story.append(Paragraph(f"Email: {dialogue.email}", styles['Normal']))
+        if dialogue.phone:
+            story.append(Paragraph(f"Telefon: {dialogue.phone}", styles['Normal']))
+    
+    doc.build(story)
+    buffer.seek(0)
+    
+    return send_file(
+        io.BytesIO(buffer.read()),
+        as_attachment=True,
+        download_name=f'dialog_{dialogue.id}_{dialogue.timestamp.strftime("%Y%m%d_%H%M%S")}.pdf',
+        mimetype='application/pdf'
+    )
 
 if __name__ == '__main__':
     with app.app_context():
