@@ -40,13 +40,14 @@
         
         <div id="initiatives-section" style="margin-top: 40px; display: none;">
             <h3>3.2 Lokale Initiativen in {{ district }}:</h3>
+            <p style="color: #666; margin-bottom: 15px;">Klicke auf die Initiativen, die dich interessieren:</p>
             <div id="initiatives-list" style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
                 <!-- Initiatives will be populated by JavaScript -->
             </div>
         </div>
         
         <div style="text-align: center; margin-top: 40px;">
-            <button type="submit" name="show_qr" class="btn" id="show-qr-btn" disabled style="background: #FF9800;">Show QR</button>
+            <button type="submit" name="show_qr" value="1" class="btn" style="background: #FF9800;">Show QR</button>
         </div>
     </form>
 </div>
@@ -120,9 +121,7 @@ function toggleInitiative(element) {
 }
 
 function updateQRButton() {
-    const selectedTypes = document.querySelectorAll('input[name="initiative_types"]:checked').length;
-    const showQrBtn = document.getElementById('show-qr-btn');
-    if (showQrBtn) showQrBtn.disabled = selectedTypes === 0;
+    // Simplified - button is always enabled
 }
 
 function getTypeIcon(type) {

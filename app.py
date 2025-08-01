@@ -39,6 +39,12 @@ class Dialogue(db.Model):
     consent = db.Column(db.String(10))
     data_protection = db.Column(db.String(20))
 
+class ContactShare(db.Model):
+    id = db.Column(db.String(50), primary_key=True)
+    district = db.Column(db.String(50))
+    initiatives = db.Column(db.JSON)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -265,10 +271,31 @@ def step3():
     district = session.get('district', '')
     return render_template('step3.html', district=district, initiatives_data=INITIATIVES_DATA)
 
-@app.route('/show_qr')
-def show_qr():
+@app.route('/contact_info')
+def contact_info():
     selected_initiatives = session.get('selected_initiatives', [])
+    initiative_types = session.get('initiative_types', [])
     district = session.get('district', '')
+    
+    # Fallback: If no specific initiatives selected, use first initiative from each type
+    if not selected_initiatives and initiative_types and district in INITIATIVES_DATA:
+        selected_initiatives = []
+        for init_type in initiative_types:
+            if init_type in INITIATIVES_DATA[district]:
+                # Get first initiative from this type
+                first_initiative = list(INITIATIVES_DATA[district][init_type].keys())[0]
+                selected_initiatives.append(first_initiative)
+    
+    # Store contact info in database for QR access
+    contact_id = f"{district}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    
+    contact_share = ContactShare(
+        id=contact_id,
+        district=district,
+        initiatives=selected_initiatives
+    )
+    db.session.add(contact_share)
+    db.session.commit()
     
     # Get detailed initiative info for display on page
     initiative_details = []
@@ -283,17 +310,90 @@ def show_qr():
                     })
                     break
     
-    return render_template('show_qr.html', 
+    # Generate QR code with URL to public contact page
+    # Use request host to make it accessible from mobile devices
+    host = request.host
+    if 'localhost' in host or '127.0.0.1' in host:
+        # Try to get network IP for mobile access
+        import socket
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            network_ip = s.getsockname()[0]
+            s.close()
+            qr_url = f"http://{network_ip}:5000/public_contact/{contact_id}"
+        except:
+            qr_url = f"http://{host}/public_contact/{contact_id}"
+    else:
+        qr_url = f"http://{host}/public_contact/{contact_id}"
+    
+    qr = qrcode.QRCode(version=1, box_size=8, border=4)
+    qr.add_data(qr_url)
+    qr.make(fit=True)
+    
+    img = qr.make_image(fill_color="black", back_color="white")
+    buffer = io.BytesIO()
+    img.save(buffer, format='PNG')
+    buffer.seek(0)
+    qr_code = base64.b64encode(buffer.getvalue()).decode()
+    
+    return render_template('contact_info.html', 
                          initiative_details=initiative_details,
-                         district=district)
+                         district=district,
+                         qr_code=qr_code,
+                         contact_url=qr_url)
+
+@app.route('/public_contact/<contact_id>')
+def public_contact(contact_id):
+    # Get contact info from database
+    contact_share = ContactShare.query.get(contact_id)
+    
+    if not contact_share:
+        return render_template('contact_info.html', 
+                             initiative_details=[],
+                             district='Unknown',
+                             qr_code=None,
+                             error="Contact information not found",
+                             public_view=True)
+    
+    selected_initiatives = contact_share.initiatives or []
+    district = contact_share.district or ''
+    
+    # Get detailed initiative info
+    initiative_details = []
+    if selected_initiatives and district in INITIATIVES_DATA:
+        for initiative in selected_initiatives:
+            for category, initiatives in INITIATIVES_DATA[district].items():
+                if initiative in initiatives:
+                    initiative_details.append({
+                        'name': initiative,
+                        'contact': initiatives[initiative]['contact'],
+                        'summary': initiatives[initiative]['summary']
+                    })
+                    break
+    
+    return render_template('contact_info.html', 
+                         initiative_details=initiative_details,
+                         district=district,
+                         qr_code=None,
+                         public_view=True)
+
+@app.route('/show_qr')
+def show_qr():
+    return redirect(url_for('contact_info'))
 
 @app.route('/step3', methods=['POST'])
 def step3_post():
     session['initiative_types'] = request.form.getlist('initiative_types')
     session['selected_initiatives'] = request.form.getlist('selected_initiatives')
     
+    # Debug: Print what was submitted
+    print(f"Initiative types: {session.get('initiative_types', [])}")
+    print(f"Selected initiatives: {session.get('selected_initiatives', [])}")
+    print(f"All form data: {dict(request.form)}")
+    
     if 'show_qr' in request.form:
-        return redirect(url_for('show_qr'))
+        return redirect(url_for('contact_info'))
     else:
         return redirect(url_for('step4'))
 
@@ -548,4 +648,21 @@ def download_dialogue_pdf():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+    print("\n" + "="*50)
+    print("🌐 Server starting...")
+    print("📱 For mobile access, use your network IP:")
+    
+    import socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        network_ip = s.getsockname()[0]
+        s.close()
+        print(f"   http://{network_ip}:5000")
+    except:
+        print("   Network IP detection failed")
+    
+    print("💻 For local access: http://localhost:5000")
+    print("="*50 + "\n")
+    
     app.run(debug=True, host='0.0.0.0', port=5000)
