@@ -9,6 +9,15 @@
     <h1 style="text-align: center;">Initiative Information</h1>
     <p style="color: #666; margin-bottom: 30px; text-align: center;">Bezirk: <strong>{{ district }}</strong></p>
     
+    <!-- QR Code Section -->
+    <div style="text-align: center; margin: 30px 0;">
+        <h3>📱 QR-Code scannen für Kontaktdaten</h3>
+        <div id="qr-code-container" style="margin: 20px 0;">
+            <canvas id="qr-canvas" style="border: 2px solid #ddd; border-radius: 10px;"></canvas>
+        </div>
+        <p style="color: #666; font-size: 14px;">Scanne den QR-Code mit deinem Smartphone</p>
+    </div>
+    
     <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
         <h3>📋 Ausgewählte Initiativen:</h3>
         
@@ -55,4 +64,29 @@
         <a href="{{ url_for('step4') }}" class="btn">Weiter zu Kontakt & Einverständnis →</a>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<script>
+// Generate QR Code
+const qrData = `Sag doch mal, Berlin - Initiativen in {{ district }}\n`;
+const qrText = qrData + 
+    `Interessensbereiche: {{ initiative_details|map(attribute='name')|join(', ') }}\n\n` +
+    `Kontakt Klimaneustart:\n` +
+    `📧 info@klimaneustart.de\n` +
+    `📱 +49 30 12345678\n` +
+    `🌐 www.klimaneustart.de`;
+
+const canvas = document.getElementById('qr-canvas');
+QRCode.toCanvas(canvas, qrText, {
+    width: 200,
+    margin: 2,
+    color: {
+        dark: '#000000',
+        light: '#FFFFFF'
+    }
+}, function (error) {
+    if (error) console.error(error);
+    console.log('QR code generated successfully!');
+});
+</script>
 {% endblock %}
