@@ -28,6 +28,7 @@ class Dialogue(db.Model):
     livable_city = db.Column(db.Text)
     partner_interest = db.Column(db.Text)
     topics = db.Column(db.JSON)
+    subtopics = db.Column(db.JSON)
     notes = db.Column(db.String(100))
     district = db.Column(db.String(50))
     initiatives = db.Column(db.JSON)
@@ -62,11 +63,22 @@ def step1():
 
 @app.route('/step2')
 def step2():
-    return render_template('step2.html')
+    return render_template('step2.html', subtopics_data=SUBTOPICS_DATA)
+
+# Subtopics data
+SUBTOPICS_DATA = {
+    'Wohnen/Bauwende': ['Affordability', 'Social Housing', 'Gentrification', 'Energy Efficiency', 'Renovation'],
+    'Mobilität': ['Cycle', 'Bicycle', 'Electric Car', 'Parking', 'Public Transport (ÖPNV)', 'Health (Accidents, Air Quality)'],
+    'Klimaanpassung': ['Heat', 'Heavy Rain', 'Trees'],
+    'Food': ['Local Production', 'Organic', 'Food Waste', 'Urban Farming', 'Sustainable Diet'],
+    'Building Transition': ['Concrete', 'Waste', 'Costs', 'Rent', 'Existing Stock', 'Community', 'Quality Of Life', 'Displacement', 'Wood'],
+    'Heating Transition': ['Openness to Technology', 'Economically Unviable', 'Rent Increase', 'Costs', 'Monument Protection', 'District Heating', 'Old Building', 'Homeownership']
+}
 
 @app.route('/step2', methods=['POST'])
 def step2_post():
     session['topics'] = request.form.getlist('topics')
+    session['subtopics'] = request.form.getlist('subtopics')
     session['notes'] = request.form.get('notes', '')
     session['district'] = request.form.get('district', '')
     return redirect(url_for('step3'))
@@ -449,6 +461,7 @@ def complete_dialogue():
         livable_city=session.get('livable_city', ''),
         partner_interest=session.get('partner_interest', ''),
         topics=session.get('topics', []),
+        subtopics=session.get('subtopics', []),
         notes=session.get('notes', ''),
         district=session.get('district', ''),
         initiatives=session.get('selected_initiatives', []),
@@ -611,6 +624,9 @@ def download_dialogue_pdf():
     story.append(Paragraph("<b>2. Diskutierte Themen:</b>", styles['Heading2']))
     topics_text = ', '.join(dialogue.topics) if dialogue.topics else 'Keine Themen ausgewählt'
     story.append(Paragraph(topics_text, styles['Normal']))
+    if dialogue.subtopics:
+        subtopics_text = ', '.join(dialogue.subtopics)
+        story.append(Paragraph(f"<b>Unterthemen:</b> {subtopics_text}", styles['Normal']))
     if dialogue.notes:
         story.append(Paragraph(f"<b>Notizen:</b> {dialogue.notes}", styles['Normal']))
     story.append(Spacer(1, 20))

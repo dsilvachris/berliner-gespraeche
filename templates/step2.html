@@ -37,6 +37,14 @@
             </div>
         </div>
         
+        <!-- Subtopics Section -->
+        <div id="subtopics-section" style="margin: 30px 0; display: none;">
+            <h3>Unterthemen (optional):</h3>
+            <div id="subtopics-container">
+                <!-- Subtopics will be populated by JavaScript -->
+            </div>
+        </div>
+        
         <div style="margin: 30px 0;">
             <label for="notes"><strong>Meine Notizen:</strong></label>
             <textarea id="notes" name="notes" rows="3" maxlength="100" placeholder="Kurze Notizen zum Gespräch..."></textarea>
@@ -67,6 +75,8 @@
 </div>
 
 <script>
+const subtopicsData = {{ subtopics_data|tojson }};
+
 function checkFormValid() {
     const topics = document.querySelectorAll('input[name="topics"]:checked');
     const district = document.getElementById('district').value;
@@ -80,7 +90,74 @@ function toggleTopic(element) {
     element.classList.toggle('selected');
     const checkbox = element.querySelector('input[type="checkbox"]');
     checkbox.checked = !checkbox.checked;
+    updateSubtopics();
     checkFormValid();
+}
+
+function updateSubtopics() {
+    const selectedTopics = Array.from(document.querySelectorAll('input[name="topics"]:checked'))
+        .map(input => input.value);
+    
+    const subtopicsSection = document.getElementById('subtopics-section');
+    const subtopicsContainer = document.getElementById('subtopics-container');
+    
+    if (selectedTopics.length === 0) {
+        subtopicsSection.style.display = 'none';
+        return;
+    }
+    
+    subtopicsSection.style.display = 'block';
+    subtopicsContainer.innerHTML = '';
+    
+    selectedTopics.forEach(topic => {
+        if (subtopicsData[topic]) {
+            const topicDiv = document.createElement('div');
+            topicDiv.style.marginBottom = '20px';
+            topicDiv.innerHTML = '<h4 style="margin-bottom: 10px; color: #333;">' + getTopicIcon(topic) + ' ' + topic + '</h4>';
+            
+            const subtopicsGrid = document.createElement('div');
+            subtopicsGrid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-left: 20px;';
+            
+            subtopicsData[topic].forEach(subtopic => {
+                const subtopicDiv = document.createElement('div');
+                subtopicDiv.style.cssText = 'padding: 8px 12px; background: #f0f0f0; border-radius: 5px; cursor: pointer; border: 2px solid transparent; font-size: 14px;';
+                subtopicDiv.onclick = function() { toggleSubtopic(subtopicDiv); };
+                
+                subtopicDiv.innerHTML = '<input type="checkbox" name="subtopics" value="' + subtopic + '" style="display: none;">' + subtopic;
+                
+                subtopicsGrid.appendChild(subtopicDiv);
+            });
+            
+            topicDiv.appendChild(subtopicsGrid);
+            subtopicsContainer.appendChild(topicDiv);
+        }
+    });
+}
+
+function toggleSubtopic(element) {
+    element.classList.toggle('selected-subtopic');
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    
+    if (checkbox.checked) {
+        element.style.border = '2px solid #4CAF50';
+        element.style.background = '#e8f5e8';
+    } else {
+        element.style.border = '2px solid transparent';
+        element.style.background = '#f0f0f0';
+    }
+}
+
+function getTopicIcon(topic) {
+    const icons = {
+        'Wohnen/Bauwende': '🏠',
+        'Mobilität': '🚲',
+        'Klimaanpassung': '🌡️',
+        'Food': '🍎',
+        'Building Transition': '🔨',
+        'Heating Transition': '🔥'
+    };
+    return icons[topic] || '📝';
 }
 
 document.querySelectorAll('input[name="topics"]').forEach(input => {
@@ -93,7 +170,7 @@ document.getElementById('notes').addEventListener('input', checkFormValid);
 document.getElementById('notes').addEventListener('input', function() {
     const remaining = this.maxLength - this.value.length;
     const small = this.nextElementSibling;
-    small.textContent = `${remaining} Zeichen übrig`;
+    small.textContent = remaining + ' Zeichen übrig';
     if (remaining < 20) small.style.color = '#f44336';
     else small.style.color = '#666';
 });
