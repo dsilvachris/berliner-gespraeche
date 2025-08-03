@@ -217,7 +217,7 @@ INITIATIVES_DATA['Neukölln'] = {
 }
 
 # Add simplified data for remaining districts
-for district in ['Kreuzberg', 'Prenzlauer Berg', 'Charlottenburg']:
+for district in ['Kreuzberg', 'Prenzlauer Berg', 'Charlottenburg', 'Friedrichshain', 'Schöneberg', 'Wedding', 'Tempelhof', 'Steglitz']:
     INITIATIVES_DATA[district] = {
         'Urban Garden': {
             f'{district} Community Garden': {
@@ -677,6 +677,8 @@ def download_dialogue_pdf():
         download_name=f'dialog_{dialogue.id}_{dialogue.timestamp.strftime("%Y%m%d_%H%M%S")}.pdf',
         mimetype='application/pdf'
     )
+
+
 
 if __name__ == '__main__':
     with app.app_context():

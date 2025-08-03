@@ -74,8 +74,6 @@
         {% if not public_view %}
         <a href="{{ url_for('step3') }}" class="btn btn-secondary" style="margin-right: 15px;">← Zurück zu Schritt 3</a>
         <a href="{{ url_for('step4') }}" class="btn">Weiter zu Schritt 4 →</a>
-        {% else %}
-        <a href="{{ url_for('index') }}" class="btn">🏠 Zur Startseite</a>
         {% endif %}
     </div>
 </div>

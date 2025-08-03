@@ -71,8 +71,18 @@ function updateInitiativesList() {
     const initiativesSection = document.getElementById('initiatives-section');
     const initiativesList = document.getElementById('initiatives-list');
     
-    if (selectedTypes.length === 0 || !district || !initiativesData[district]) {
+    console.log('Selected types:', selectedTypes);
+    console.log('District:', district);
+    console.log('Initiatives data:', initiativesData);
+    
+    if (selectedTypes.length === 0) {
         initiativesSection.style.display = 'none';
+        return;
+    }
+    
+    if (!district || !initiativesData[district]) {
+        initiativesList.innerHTML = '<p style="color: #999;">Keine Initiativen für diesen Bezirk verfügbar</p>';
+        initiativesSection.style.display = 'block';
         return;
     }
     
@@ -80,26 +90,28 @@ function updateInitiativesList() {
     initiativesList.innerHTML = '';
     
     selectedTypes.forEach(type => {
-        if (initiativesData[district][type]) {
+        if (initiativesData[district] && initiativesData[district][type]) {
             const typeDiv = document.createElement('div');
             typeDiv.style.marginBottom = '20px';
-            typeDiv.innerHTML = `<h4 style="margin-bottom: 10px;">${getTypeIcon(type)} ${type}</h4>`;
+            typeDiv.innerHTML = '<h4 style="margin-bottom: 10px;">' + getTypeIcon(type) + ' ' + type + '</h4>';
             
             Object.keys(initiativesData[district][type]).forEach(initiative => {
                 const initiativeDiv = document.createElement('div');
                 initiativeDiv.style.cssText = 'margin: 10px 0; padding: 15px; background: white; border-radius: 8px; cursor: pointer; border: 2px solid transparent;';
-                initiativeDiv.onclick = () => toggleInitiative(initiativeDiv);
+                initiativeDiv.onclick = function() { toggleInitiative(initiativeDiv); };
                 
-                initiativeDiv.innerHTML = `
-                    <input type="checkbox" name="selected_initiatives" value="${initiative}" style="display: none;">
-                    <strong>${initiative}</strong>
-                    <p style="margin: 5px 0; color: #666;">Initiative in ${district}</p>
-                `;
+                const initiativeData = initiativesData[district][type][initiative];
+                initiativeDiv.innerHTML = '<input type="checkbox" name="selected_initiatives" value="' + initiative + '" style="display: none;">' +
+                    '<strong>' + initiative + '</strong>' +
+                    '<p style="margin: 5px 0; color: #666; font-size: 14px;">' + (initiativeData.summary || 'Initiative in ' + district) + '</p>' +
+                    '<p style="margin: 5px 0; color: #888; font-size: 12px;">📞 ' + (initiativeData.contact || 'Kontakt verfügbar') + '</p>';
                 
                 typeDiv.appendChild(initiativeDiv);
             });
             
             initiativesList.appendChild(typeDiv);
+        } else {
+            console.log('No initiatives found for type:', type, 'in district:', district);
         }
     });
 }
