@@ -35,6 +35,9 @@ class Dialogue(db.Model):
     reflection = db.Column(db.Text)
     num_people = db.Column(db.Integer)
     duration = db.Column(db.Integer)
+    family_status = db.Column(db.String(50))
+    name = db.Column(db.String(100))
+    surname = db.Column(db.String(100))
     email = db.Column(db.String(120))
     phone = db.Column(db.String(20))
     consent = db.Column(db.String(10))
@@ -444,6 +447,8 @@ def step4():
 
 @app.route('/step4', methods=['POST'])
 def step4_post():
+    session['name'] = request.form.get('name', '')
+    session['surname'] = request.form.get('surname', '')
     session['email'] = request.form.get('email', '')
     session['phone'] = request.form.get('phone', '')
     session['consent'] = request.form.get('consent', '')
@@ -456,18 +461,24 @@ def step5():
 
 @app.route('/complete', methods=['POST'])
 def complete_dialogue():
-    # Save dialogue to database
+    # Save dialogue to database - use district from step5 if provided, otherwise from step2
+    step5_district = request.form.get('district', '')
+    final_district = step5_district if step5_district else session.get('district', '')
+    
     dialogue = Dialogue(
         livable_city=session.get('livable_city', ''),
         partner_interest=session.get('partner_interest', ''),
         topics=session.get('topics', []),
         subtopics=session.get('subtopics', []),
         notes=session.get('notes', ''),
-        district=session.get('district', ''),
+        district=final_district,
         initiatives=session.get('selected_initiatives', []),
         reflection=request.form.get('reflection', ''),
         num_people=int(request.form.get('num_people', 1)),
         duration=int(request.form.get('duration', 0)),
+        family_status=request.form.get('family_status', ''),
+        name=session.get('name', ''),
+        surname=session.get('surname', ''),
         email=session.get('email', ''),
         phone=session.get('phone', ''),
         consent=session.get('consent', ''),
@@ -607,6 +618,9 @@ def download_dialogue_pdf():
     # Dialogue details
     story.append(Paragraph(f"<b>Datum:</b> {dialogue.timestamp.strftime('%d.%m.%Y %H:%M')}", styles['Normal']))
     story.append(Paragraph(f"<b>Bezirk:</b> {dialogue.district or 'Nicht angegeben'}", styles['Normal']))
+    if dialogue.family_status:
+        family_text = 'Alleinstehend' if dialogue.family_status == 'single' else 'Mit Familie'
+        story.append(Paragraph(f"<b>Familienstatus:</b> {family_text}", styles['Normal']))
     story.append(Paragraph(f"<b>Anzahl Personen:</b> {dialogue.num_people}", styles['Normal']))
     story.append(Paragraph(f"<b>Dauer:</b> {dialogue.duration} Minuten", styles['Normal']))
     story.append(Spacer(1, 20))
@@ -646,6 +660,9 @@ def download_dialogue_pdf():
     # Contact info (if consent given)
     if dialogue.consent == 'yes':
         story.append(Paragraph("<b>Kontaktdaten:</b>", styles['Heading2']))
+        if dialogue.name or dialogue.surname:
+            name_text = f"{dialogue.name or ''} {dialogue.surname or ''}".strip()
+            story.append(Paragraph(f"Name: {name_text}", styles['Normal']))
         if dialogue.email:
             story.append(Paragraph(f"Email: {dialogue.email}", styles['Normal']))
         if dialogue.phone:

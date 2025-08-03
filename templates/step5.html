@@ -15,6 +15,40 @@
             <textarea id="reflection" name="reflection" rows="4" placeholder="Teile deine Gedanken und Erkenntnisse aus dem Gespräch..."></textarea>
         </div>
         
+        <h3>Persönliche Angaben:</h3>
+        <div style="margin: 20px 0;">
+            <label for="district"><strong>🏢 Dein Bezirk:</strong></label>
+            <select id="district" name="district" required>
+                <option value="">Bezirk auswählen</option>
+                <option value="Mitte">Mitte</option>
+                <option value="Neukölln">Neukölln</option>
+                <option value="Kreuzberg">Kreuzberg</option>
+                <option value="Prenzlauer Berg">Prenzlauer Berg</option>
+                <option value="Charlottenburg">Charlottenburg</option>
+                <option value="Friedrichshain">Friedrichshain</option>
+                <option value="Schöneberg">Schöneberg</option>
+                <option value="Wedding">Wedding</option>
+                <option value="Tempelhof">Tempelhof</option>
+                <option value="Steglitz">Steglitz</option>
+            </select>
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <label><strong>👪 Familienstatus:</strong></label>
+            <div style="margin: 10px 0;">
+                <label>
+                    <input type="radio" name="family_status" value="single" style="width: auto; margin-right: 10px;">
+                    👤 Alleinstehend
+                </label>
+            </div>
+            <div style="margin: 10px 0;">
+                <label>
+                    <input type="radio" name="family_status" value="family" style="width: auto; margin-right: 10px;">
+                    👪 Mit Familie
+                </label>
+            </div>
+        </div>
+        
         <h3>Interview-Details:</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
             <div>

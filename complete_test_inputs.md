@@ -27,13 +27,17 @@ Mein Gesprächspartner interessiert sich besonders für Urban Gardening und möc
 - **3.4 Show QR**: Zeigt detaillierte Initiative-Infos + Klimaneustart Kontakt
 
 ### Schritt 4: Kontakt & Einverständnis
+- **Vorname**: `Max`
+- **Nachname**: `Mustermann`
 - **Email**: `max.mustermann@email.de`
 - **Telefon**: `+49 30 12345678`
 - **Einverständnis**: ✅ Ja
 - **Datenschutz**: Nur anonyme Metadaten speichern
 
 ### Schritt 5: Reflexion & Zusammenfassung
-- **Reflexion**: `Das Gespräch hat mir gezeigt, wie wichtig lokale Initiativen für den Klimaschutz sind. Besonders inspirierend war die Idee, dass jeder kleine Beitrag zählt.`
+- **Bezirk**: Neukölln
+- **Familienstatus**: Mit Familie
+- **Reflexion**: `Das Gespräch hat mir gezeigt, wie wichtig lokale Initiativen für den Klimaschutz sind. Besonders inspirierend war die Idea, dass jeder kleine Beitrag zählt.`
 - **Anzahl Personen**: 2
 - **Dauer**: 25 Minuten
 
@@ -65,12 +69,16 @@ Die Person interessiert sich für Klimaanpassung in der Stadt, besonders für me
 - **Auswahl**: Klimawerkstatt Berlin + Klimaneustart Berlin
 
 ### Schritt 4
+- **Vorname**: `Anna`
+- **Nachname**: `Berlin`
 - **Email**: `anna.berlin@email.de`
 - **Telefon**: `+49 30 87654321`
 - **Einverständnis**: ✅ Ja
 - **Datenschutz**: Vollständigen Dialog speichern
 
 ### Schritt 5
+- **Bezirk**: Mitte
+- **Familienstatus**: Alleinstehend
 - **Reflexion**: `Toller Austausch über praktische Klimaschutz-Maßnahmen im Alltag.`
 - **Anzahl Personen**: 1
 - **Dauer**: 15 Minuten
@@ -104,12 +112,16 @@ Interesse an digitaler Inklusion und Nachbarschaftshilfe, besonders für ältere
 - **Auswahl**: Kreuzberg Community Garden + Kreuzberg Solidarity + Kreuzberg Digital Hub
 
 ### Schritt 4
+- **Vorname**: `Peter`
+- **Nachname**: `Kreuzberg`
 - **Email**: `peter.kreuzberg@email.de`
 - **Telefon**: `+49 30 11223344`
 - **Einverständnis**: ✅ Ja
 - **Datenschutz**: Nur anonyme Metadaten speichern
 
 ### Schritt 5
+- **Bezirk**: Kreuzberg
+- **Familienstatus**: Mit Familie
 - **Reflexion**: `Beeindruckende Vielfalt der lokalen Initiativen. Ich plane, mich bei mindestens zwei Projekten zu engagieren.`
 - **Anzahl Personen**: 3
 - **Dauer**: 35 Minuten

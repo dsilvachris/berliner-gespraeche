@@ -63,6 +63,8 @@ Neukölln
 
 ### Kontaktdaten:
 ```
+Vorname: Max
+Nachname: Mustermann
 Email: max.mustermann@email.de
 Telefon: +49 30 12345678
 ```
@@ -75,6 +77,12 @@ Telefon: +49 30 12345678
 - ✅ Nur anonyme Metadaten speichern
 
 ## Schritt 5: Reflexion & Zusammenfassung
+
+### Persönliche Angaben:
+```
+Bezirk: Neukölln
+Familienstatus: Mit Familie
+```
 
 ### Deine Reflexion:
 ```
