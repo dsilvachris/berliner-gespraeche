@@ -38,10 +38,23 @@
         </div>
         
         <!-- Subtopics Section -->
-        <div id="subtopics-section" style="margin: 30px 0; display: none;">
+        <div id="subtopics-section" style="margin: 30px 0;">
             <h3>Unterthemen (optional):</h3>
             <div id="subtopics-container">
-                <!-- Subtopics will be populated by JavaScript -->
+                <!-- Show all subtopics by default -->
+                {% for topic, subtopics in subtopics_data.items() %}
+                <div style="margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px; color: #333;">{{ topic }}</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-left: 20px;">
+                        {% for subtopic in subtopics %}
+                        <div class="subtopic-card" onclick="toggleSubtopic(this)" style="padding: 8px 12px; background: #f0f0f0; border-radius: 5px; cursor: pointer; border: 2px solid transparent; font-size: 14px;">
+                            <input type="checkbox" name="subtopics" value="{{ subtopic }}" style="display: none;">
+                            {{ subtopic }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
         
@@ -87,52 +100,23 @@ function checkFormValid() {
 }
 
 function toggleTopic(element) {
-    element.classList.toggle('selected');
     const checkbox = element.querySelector('input[type="checkbox"]');
     checkbox.checked = !checkbox.checked;
-    updateSubtopics();
+    
+    if (checkbox.checked) {
+        element.classList.add('selected');
+        element.style.background = '#e8f5e8';
+        element.style.border = '2px solid #4CAF50';
+    } else {
+        element.classList.remove('selected');
+        element.style.background = '';
+        element.style.border = '';
+    }
+    
     checkFormValid();
 }
 
-function updateSubtopics() {
-    const selectedTopics = Array.from(document.querySelectorAll('input[name="topics"]:checked'))
-        .map(input => input.value);
-    
-    const subtopicsSection = document.getElementById('subtopics-section');
-    const subtopicsContainer = document.getElementById('subtopics-container');
-    
-    if (selectedTopics.length === 0) {
-        subtopicsSection.style.display = 'none';
-        return;
-    }
-    
-    subtopicsSection.style.display = 'block';
-    subtopicsContainer.innerHTML = '';
-    
-    selectedTopics.forEach(topic => {
-        if (subtopicsData[topic]) {
-            const topicDiv = document.createElement('div');
-            topicDiv.style.marginBottom = '20px';
-            topicDiv.innerHTML = '<h4 style="margin-bottom: 10px; color: #333;">' + getTopicIcon(topic) + ' ' + topic + '</h4>';
-            
-            const subtopicsGrid = document.createElement('div');
-            subtopicsGrid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-left: 20px;';
-            
-            subtopicsData[topic].forEach(subtopic => {
-                const subtopicDiv = document.createElement('div');
-                subtopicDiv.style.cssText = 'padding: 8px 12px; background: #f0f0f0; border-radius: 5px; cursor: pointer; border: 2px solid transparent; font-size: 14px;';
-                subtopicDiv.onclick = function() { toggleSubtopic(subtopicDiv); };
-                
-                subtopicDiv.innerHTML = '<input type="checkbox" name="subtopics" value="' + subtopic + '" style="display: none;">' + subtopic;
-                
-                subtopicsGrid.appendChild(subtopicDiv);
-            });
-            
-            topicDiv.appendChild(subtopicsGrid);
-            subtopicsContainer.appendChild(topicDiv);
-        }
-    });
-}
+// Simplified - subtopics are now always visible
 
 function toggleSubtopic(element) {
     element.classList.toggle('selected-subtopic');
@@ -173,6 +157,11 @@ document.getElementById('notes').addEventListener('input', function() {
     small.textContent = remaining + ' Zeichen übrig';
     if (remaining < 20) small.style.color = '#f44336';
     else small.style.color = '#666';
+});
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    checkFormValid();
 });
 </script>
 {% endblock %}
