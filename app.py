@@ -51,11 +51,37 @@ class ContactShare(db.Model):
 
 @app.route('/')
 def index():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
     return render_template('index.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if username == 'Admin' and password == 'Admin123':
+            session['logged_in'] = True
+            return redirect(url_for('index'))
+        else:
+            return render_template('login.html', error='Ungültige Anmeldedaten')
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('login'))
 
 @app.route('/start')
 def start_dialogue():
-    session.clear()
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    # Clear dialogue session but keep login status
+    dialogue_keys = [k for k in session.keys() if k != 'logged_in']
+    for key in dialogue_keys:
+        session.pop(key, None)
     return render_template('step1.html')
 
 @app.route('/step1', methods=['POST'])
@@ -399,6 +425,11 @@ def show_qr():
 
 @app.route('/step3', methods=['POST'])
 def step3_post():
+    if 'skip_step' in request.form:
+        session['initiative_types'] = []
+        session['selected_initiatives'] = []
+        return redirect(url_for('step4'))
+    
     session['initiative_types'] = request.form.getlist('initiative_types')
     session['selected_initiatives'] = request.form.getlist('selected_initiatives')
     
@@ -497,6 +528,8 @@ def complete_dialogue():
 
 @app.route('/dashboard')
 def dashboard():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
     dialogues = Dialogue.query.order_by(Dialogue.timestamp.desc()).all()
     
     # Calculate dashboard data
