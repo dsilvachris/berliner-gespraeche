@@ -25,6 +25,20 @@
     </div>
     
     <div style="margin: 40px 0;">
+        <button onclick="togglePepTalk()" class="btn" style="margin: 10px; background: #4CAF50;">
+            💬 Pep Talk (Output & Outcome)
+        </button>
+        <div id="pepTalkBox" style="display: none; margin: 20px auto; max-width: 600px; text-align: left; background: #f0f8ff; padding: 20px; border-radius: 10px; border: 2px solid #4CAF50;">
+            <p style="color: #333; line-height: 1.6;">
+                An optional AI-generated output at the end that gives a pep talk or summary – could include suggestions for improvement, focus areas, or next steps. Adds a thoughtful finishing touch
+            </p>
+        </div>
+    </div>
+    
+    <div style="margin: 40px 0;">
+        <button class="btn" style="margin: 10px; background: #2196F3;">
+            📧 Send my Response through Email
+        </button>
         <a href="{{ url_for('download_dialogue_pdf') }}" class="btn" style="margin: 10px; background: #FF5722;">
             📄 Dialog als PDF herunterladen
         </a>
@@ -46,4 +60,15 @@
         </p>
     </div>
 </div>
+
+<script>
+function togglePepTalk() {
+    const pepTalkBox = document.getElementById('pepTalkBox');
+    if (pepTalkBox.style.display === 'none') {
+        pepTalkBox.style.display = 'block';
+    } else {
+        pepTalkBox.style.display = 'none';
+    }
+}
+</script>
 {% endblock %}

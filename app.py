@@ -490,11 +490,37 @@ def step4_post():
 def step5():
     return render_template('step5.html')
 
-@app.route('/complete', methods=['POST'])
+@app.route('/step5', methods=['POST'])
+def step5_post():
+    session['reflection'] = request.form.get('reflection', '')
+    session['num_people'] = request.form.get('num_people', '1')
+    session['duration'] = request.form.get('duration', '0')
+    session['family_status'] = request.form.get('family_status', '')
+    return redirect(url_for('review'))
+
+@app.route('/review')
+def review():
+    return render_template('review.html')
+
+@app.route('/review', methods=['POST'])
+def review_post():
+    # Update session with edited values
+    session['livable_city'] = request.form.get('livable_city', '')
+    session['partner_interest'] = request.form.get('partner_interest', '')
+    session['notes'] = request.form.get('notes', '')
+    session['district'] = request.form.get('district', '')
+    session['name'] = request.form.get('name', '')
+    session['surname'] = request.form.get('surname', '')
+    session['email'] = request.form.get('email', '')
+    session['phone'] = request.form.get('phone', '')
+
+    
+    return redirect(url_for('complete_dialogue'))
+
+@app.route('/complete')
 def complete_dialogue():
-    # Save dialogue to database - use district from step5 if provided, otherwise from step2
-    step5_district = request.form.get('district', '')
-    final_district = step5_district if step5_district else session.get('district', '')
+    # Save dialogue to database
+    final_district = session.get('district', '')
     
     dialogue = Dialogue(
         livable_city=session.get('livable_city', ''),
@@ -504,10 +530,10 @@ def complete_dialogue():
         notes=session.get('notes', ''),
         district=final_district,
         initiatives=session.get('selected_initiatives', []),
-        reflection=request.form.get('reflection', ''),
-        num_people=int(request.form.get('num_people', 1)),
-        duration=int(request.form.get('duration', 0)),
-        family_status=request.form.get('family_status', ''),
+        reflection=session.get('reflection', ''),
+        num_people=int(session.get('num_people', 1)),
+        duration=int(session.get('duration', 0)),
+        family_status=session.get('family_status', ''),
         name=session.get('name', ''),
         surname=session.get('surname', ''),
         email=session.get('email', ''),
