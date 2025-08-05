@@ -1,337 +1,387 @@
 # Complete Test Inputs - Sag doch mal, Berlin
 
-## Test Scenario 1: Standard Flow
-
-### Schritt 1: Dialog-Essenz erfassen
-**Was macht für dich eine lebenswerte Stadt aus?**
-```
-Eine lebenswerte Stadt bietet grüne Oasen zum Entspannen, sichere Fahrradwege für nachhaltige Mobilität und bezahlbaren Wohnraum für alle. Wichtig sind auch kulturelle Vielfalt, lokale Märkte mit regionalen Produkten und Gemeinschaftsräume, wo sich Menschen begegnen können.
-```
-
-**Was ist das Interesse des Dialogpartners?**
-```
-Mein Gesprächspartner interessiert sich besonders für Urban Gardening und möchte lernen, wie man in der Stadt nachhaltig Gemüse anbauen kann. Außerdem ist er an Repair Cafés interessiert, um Elektrogeräte zu reparieren statt wegzuwerfen.
-```
-
-### Schritt 2: Diskutierte Themen
-- **Themen**: Wohnen/Bauwende + Mobilität + Food
-- **Notizen**: `Sehr interessantes Gespräch über nachhaltige Stadtentwicklung`
-- **Bezirk**: Neukölln
-
-### Schritt 3: Initiative auswählen
-- **3.1 Interessensbereiche**: Urban Garden + Repair Café
-- **3.2 Verfügbare Initiativen** (erscheinen automatisch):
-  - Urban Garden: Tempelhofer Feld Gärten, Nachbarschaftsgarten Rixdorf
-  - Repair Café: Repair Café Neukölln, Werkstatt der Kulturen
-- **3.3 Auswahl**: Tempelhofer Feld Gärten + Repair Café Neukölln
-- **3.4 Show QR**: Zeigt detaillierte Initiative-Infos + Klimaneustart Kontakt
-
-### Schritt 4: Kontakt & Einverständnis
-- **Vorname**: `Max`
-- **Nachname**: `Mustermann`
-- **Email**: `max.mustermann@email.de`
-- **Telefon**: `+49 30 12345678`
-- **Einverständnis**: ✅ Ja
-- **Datenschutz**: Nur anonyme Metadaten speichern
-
-### Schritt 5: Reflexion & Zusammenfassung
-- **Bezirk**: Neukölln
-- **Familienstatus**: Mit Familie
-- **Reflexion**: `Das Gespräch hat mir gezeigt, wie wichtig lokale Initiativen für den Klimaschutz sind. Besonders inspirierend war die Idea, dass jeder kleine Beitrag zählt.`
-- **Anzahl Personen**: 2
-- **Dauer**: 25 Minuten
-
----
-
-## Test Scenario 2: Mitte District
-
-### Schritt 1
-**Lebenswerte Stadt:**
-```
-Für mich bedeutet eine lebenswerte Stadt kurze Wege zu allem Wichtigen, saubere Luft ohne Autoabgase und Nachbarschaften, wo man sich kennt und hilft.
-```
-
-**Dialogpartner-Interesse:**
-```
-Die Person interessiert sich für Klimaanpassung in der Stadt, besonders für mehr Bäume und Wasserflächen zur Kühlung.
-```
-
-### Schritt 2
-- **Themen**: Klimaanpassung + Building Transition + Heating Transition
-- **Notizen**: `Fokus auf Gebäudesanierung und Wärmepumpen`
-- **Bezirk**: Mitte
-
-### Schritt 3
-- **Interessensbereiche**: Climate Education + Policy Advocacy
-- **Verfügbare Initiativen**:
-  - Climate Education: Klimawerkstatt Berlin, BUND Umweltbildung
-  - Policy Advocacy: Klimaneustart Berlin, Changing Cities
-- **Auswahl**: Klimawerkstatt Berlin + Klimaneustart Berlin
-
-### Schritt 4
-- **Vorname**: `Anna`
-- **Nachname**: `Berlin`
-- **Email**: `anna.berlin@email.de`
-- **Telefon**: `+49 30 87654321`
-- **Einverständnis**: ✅ Ja
-- **Datenschutz**: Vollständigen Dialog speichern
-
-### Schritt 5
-- **Bezirk**: Mitte
-- **Familienstatus**: Alleinstehend
-- **Reflexion**: `Toller Austausch über praktische Klimaschutz-Maßnahmen im Alltag.`
-- **Anzahl Personen**: 1
-- **Dauer**: 15 Minuten
-
----
-
-## Test Scenario 3: Kreuzberg District
-
-### Schritt 1
-**Lebenswerte Stadt:**
-```
-Eine Stadt, die Raum für Kreativität und Vielfalt bietet, mit bezahlbaren Mieten und starken Nachbarschaftsgemeinschaften.
-```
-
-**Dialogpartner-Interesse:**
-```
-Interesse an digitaler Inklusion und Nachbarschaftshilfe, besonders für ältere Menschen im Kiez.
-```
-
-### Schritt 2
-- **Themen**: Mobilität + Food + Climate Education
-- **Notizen**: `Diskussion über Lastenräder und lokale Lebensmittel`
-- **Bezirk**: Kreuzberg
-
-### Schritt 3
-- **Interessensbereiche**: Urban Garden + Mutual Aid + Digital Inclusion
-- **Verfügbare Initiativen**:
-  - Urban Garden: Kreuzberg Community Garden, Kreuzberg Green Space
-  - Mutual Aid: Kreuzberg Solidarity, Community Care Kreuzberg
-  - Digital Inclusion: Kreuzberg Digital Hub, Tech for All Kreuzberg
-- **Auswahl**: Kreuzberg Community Garden + Kreuzberg Solidarity + Kreuzberg Digital Hub
-
-### Schritt 4
-- **Vorname**: `Peter`
-- **Nachname**: `Kreuzberg`
-- **Email**: `peter.kreuzberg@email.de`
-- **Telefon**: `+49 30 11223344`
-- **Einverständnis**: ✅ Ja
-- **Datenschutz**: Nur anonyme Metadaten speichern
-
-### Schritt 5
-- **Bezirk**: Kreuzberg
-- **Familienstatus**: Mit Familie
-- **Reflexion**: `Beeindruckende Vielfalt der lokalen Initiativen. Ich plane, mich bei mindestens zwei Projekten zu engagieren.`
-- **Anzahl Personen**: 3
-- **Dauer**: 35 Minuten
-
----
-
-## Test Scenario 4: Prenzlauer Berg
-
-### Schritt 1
-**Lebenswerte Stadt:**
-```
-Eine familienfreundliche Stadt mit guten Schulen, Parks zum Spielen und einer starken Gemeinschaft.
-```
-
-**Dialogpartner-Interesse:**
-```
-Interesse an Reparatur-Workshops und Umweltbildung für Kinder und Familien.
-```
-
-### Schritt 2
-- **Themen**: Wohnen/Bauwende + Climate Education
-- **Notizen**: `Familie mit Kindern, sehr umweltbewusst`
-- **Bezirk**: Prenzlauer Berg
-
-### Schritt 3
-- **Interessensbereiche**: Repair Café + Climate Education
-- **Verfügbare Initiativen**:
-  - Repair Café: Repair Café Prenzlauer Berg, Prenzlauer Berg Fix Workshop
-  - Climate Education: Prenzlauer Berg Climate Hub, Eco Education Prenzlauer Berg
-- **Auswahl**: Repair Café Prenzlauer Berg + Eco Education Prenzlauer Berg
-
-### Schritt 4
-- **Email**: `familie.mueller@email.de`
-- **Telefon**: `+49 30 55667788`
-- **Einverständnis**: ✅ Ja
-- **Datenschutz**: Vollständigen Dialog speichern
-
-### Schritt 5
-- **Reflexion**: `Wichtig, dass auch Kinder früh lernen, wie sie zum Klimaschutz beitragen können.`
-- **Anzahl Personen**: 4
-- **Dauer**: 20 Minuten
-
----
-
-## Test Scenario 5: Charlottenburg
-
-### Schritt 1
-**Lebenswerte Stadt:**
-```
-Eine gut vernetzte Stadt mit effizienten öffentlichen Verkehrsmitteln und digitaler Infrastruktur für alle.
-```
-
-**Dialogpartner-Interesse:**
-```
-Interesse an politischem Engagement und digitaler Teilhabe für Senioren.
-```
-
-### Schritt 2
-- **Themen**: Mobilität + Digital Inclusion
-- **Notizen**: `Senior, sehr engagiert in lokaler Politik`
-- **Bezirk**: Charlottenburg
-
-### Schritt 3
-- **Interessensbereiche**: Policy Advocacy + Digital Inclusion
-- **Verfügbare Initiativen**:
-  - Policy Advocacy: Charlottenburg Climate Action, Citizens for Charlottenburg
-  - Digital Inclusion: Charlottenburg Digital Hub, Tech for All Charlottenburg
-- **Auswahl**: Citizens for Charlottenburg + Tech for All Charlottenburg
-
-### Schritt 4
-- **Email**: `werner.schmidt@email.de`
-- **Telefon**: `+49 30 99887766`
-- **Einverständnis**: ✅ Ja
-- **Datenschutz**: Nur anonyme Metadaten speichern
-
-### Schritt 5
-- **Reflexion**: `Als Senior möchte ich sowohl politisch aktiv bleiben als auch digital nicht abgehängt werden.`
-- **Anzahl Personen**: 1
-- **Dauer**: 30 Minuten
-
----
-
-## Test Scenario 6: Environmental Activist
-
-### Schritt 1
-**Lebenswerte Stadt:**
-```
-Eine lebenswerte Stadt ist für mich eine, die im Einklang mit der Natur steht. Viele Bäume, saubere Gewässer, Wildtiere in der Stadt und Null-Emissions-Zonen. Außerdem sollten alle Dächer begrünt sein und es sollte überall Platz für Urban Farming geben.
-```
-
-**Dialogpartner-Interesse:**
-```
-Meine Gesprächspartnerin ist Lehrerin und möchte ihre Schüler für Umweltthemen begeistern. Sie sucht nach praktischen Projekten, die sie mit ihrer Klasse umsetzen kann, besonders im Bereich Müllvermeidung und Energiesparen.
-```
-
-### Schritt 2
-- **Themen**: Klimaanpassung + Building Transition + Food
-- **Notizen**: `Lehrerin mit 25 Schülern, 5. Klasse, sehr motiviert`
-- **Bezirk**: Mitte
-
-### Schritt 3
-- **Interessensbereiche**: Climate Education + Urban Garden + Policy Advocacy
-- **Verfügbare Initiativen**:
-  - Climate Education: Klimawerkstatt Berlin, BUND Umweltbildung
-  - Urban Garden: Prinzessinnengarten, Gemeinschaftsgarten Wedding
-  - Policy Advocacy: Klimaneustart Berlin, Changing Cities
-- **Auswahl**: Klimawerkstatt Berlin + Prinzessinnengarten + Klimaneustart Berlin
-
-### Schritt 4
-- **Email**: `sabine.umwelt@schule-berlin.de`
-- **Telefon**: `+49 30 98765432`
-- **Einverständnis**: ✅ Ja
-- **Datenschutz**: Vollständigen Dialog speichern
-
-### Schritt 5
-- **Reflexion**: `Als Umweltaktivistin freue ich mich sehr, dass auch Lehrer wie meine Gesprächspartnerin das Thema ernst nehmen. Kinder sind unsere Zukunft und wenn wir sie früh sensibilisieren, können wir wirklich etwas bewegen.`
-- **Anzahl Personen**: 2
-- **Dauer**: 40 Minuten
-
----
-
-## Test Scenario 7: Senior Citizen
-
-### Schritt 1
-**Lebenswerte Stadt:**
-```
-In meinem Alter brauche ich eine Stadt mit guten öffentlichen Verkehrsmitteln, vielen Bänken zum Ausruhen und barrierefreien Zugängen. Wichtig sind auch Begegnungsstätten für Senioren und bezahlbare Gesundheitsversorgung in der Nähe.
-```
-
-**Dialogpartner-Interesse:**
-```
-Der junge Mann interessiert sich dafür, wie ältere Menschen digitale Technologien nutzen können. Er möchte ein Projekt starten, um Senioren bei der Nutzung von Smartphones und Internet zu helfen.
-```
-
-### Schritt 2
-- **Themen**: Mobilität + Wohnen/Bauwende
-- **Notizen**: `Sehr netter junger Mann, Student der Informatik`
-- **Bezirk**: Charlottenburg
-
-### Schritt 3
-- **Interessensbereiche**: Digital Inclusion + Mutual Aid
-- **Verfügbare Initiativen**:
-  - Digital Inclusion: Charlottenburg Digital Hub, Tech for All Charlottenburg
-  - Mutual Aid: Charlottenburg Solidarity, Community Care Charlottenburg
-- **Auswahl**: Tech for All Charlottenburg + Community Care Charlottenburg
-
-### Schritt 4
-- **Email**: `gertrud.mueller@email.de`
-- **Telefon**: `+49 30 55443322`
-- **Einverständnis**: ✅ Ja
-- **Datenschutz**: Nur anonyme Metadaten speichern
-
-### Schritt 5
-- **Reflexion**: `Es war sehr schön zu sehen, wie sich junge Menschen für uns Ältere einsetzen. Ich habe selbst Schwierigkeiten mit dem Internet und würde gerne lernen, wie ich mit meinen Enkeln über WhatsApp schreiben kann.`
-- **Anzahl Personen**: 2
-- **Dauer**: 30 Minuten
-
----
-
-## Test Scenario 8: Young Family
-
-### Schritt 1
-**Lebenswerte Stadt:**
-```
-Als Familie mit zwei kleinen Kindern wünschen wir uns sichere Spielplätze, autofreie Straßen vor Schulen und Kitas, sowie viele Grünflächen. Auch wichtig: bezahlbare Wohnungen und gute Kinderbetreuung in der Nähe.
-```
-
-**Dialogpartner-Interesse:**
-```
-Das Paar möchte nachhaltiger leben und sucht nach Möglichkeiten, Lebensmittel regional zu kaufen und Müll zu reduzieren. Sie interessieren sich auch für Gemeinschaftsgärten, wo ihre Kinder lernen können, wo Essen herkommt.
-```
-
-### Schritt 2
-- **Themen**: Food + Wohnen/Bauwende + Mobilität
-- **Notizen**: `Familie mit 3-jährigem und 6-jährigem Kind`
-- **Bezirk**: Prenzlauer Berg
-
-### Schritt 3
-- **Interessensbereiche**: Urban Garden + Repair Café + Mutual Aid
-- **Verfügbare Initiativen**:
-  - Urban Garden: Prenzlauer Berg Community Garden, Prenzlauer Berg Green Space
-  - Repair Café: Repair Café Prenzlauer Berg, Prenzlauer Berg Fix Workshop
-  - Mutual Aid: Prenzlauer Berg Solidarity, Community Care Prenzlauer Berg
-- **Auswahl**: Prenzlauer Berg Community Garden + Repair Café Prenzlauer Berg + Community Care Prenzlauer Berg
-
-### Schritt 4
-- **Email**: `familie.schmidt@email.de`
-- **Telefon**: `+49 30 77889900`
-- **Einverständnis**: ✅ Ja
-- **Datenschutz**: Vollständigen Dialog speichern
-
-### Schritt 5
-- **Reflexion**: `Wir sind begeistert von den vielen Möglichkeiten in unserem Kiez! Besonders der Gemeinschaftsgarten klingt toll für unsere Kinder. Es ist schön zu wissen, dass es so viele Menschen gibt, die sich für eine bessere Zukunft einsetzen.`
-- **Anzahl Personen**: 3
-- **Dauer**: 35 Minuten
-
----
-
-## Quick Test Inputs
-
-### Minimal Test (Kreuzberg)
-- **Schritt 1**: Kurze Antworten (je 1 Satz)
-- **Schritt 2**: Nur "Food" + Bezirk Kreuzberg
-- **Schritt 3**: Urban Garden → Kreuzberg Community Garden
-- **Schritt 4**: Nur Email: `test@email.de`
-- **Schritt 5**: `Interessant.` + 1 Person + 5 Minuten
-
-### Maximum Test (Neukölln)
-- **Schritt 1**: Sehr lange Texte (fast 2000 Zeichen)
-- **Schritt 2**: Alle 6 Themen + ausführliche Notizen
-- **Schritt 3**: Alle 6 Interessensbereiche + viele Initiativen
-- **Schritt 4**: Vollständige Daten + Vollständigen Dialog speichern
-- **Schritt 5**: Sehr ausführliche Reflexion + 8 Personen + 90 Minuten
+## Test 1: Young Professional (Mitte)
+**Step 1:**
+- Lebenswerte Stadt: `Gute ÖPNV-Anbindung, Co-Working-Spaces, kulturelle Vielfalt`
+- Partner Interesse: `Interessiert sich für nachhaltige Mobilität und Fahrradinfrastruktur`
+
+**Step 2:**
+- Themen: Mobilität, Wohnen/Bauwende
+- Subtopics: Bicycle, Public Transport, Affordability
+- Notizen: `Pendelt täglich mit dem Rad`
+- Bezirk: Mitte
+
+**Step 3:**
+- Initiative Types: Policy Advocacy
+- Selected: Changing Cities
+
+**Step 4:**
+- Name: Lisa, Surname: Weber
+- Email: lisa.weber@email.de, Phone: +49 30 12345678
+- Consent: Yes, Data Protection: Vollständigen Dialog speichern
+
+**Step 5:**
+- Reflexion: `Wichtig, dass Politik mehr für Radfahrer tut`
+- Personen: 1, Dauer: 20, Familie: single
+
+## Test 2: Family with Kids (Neukölln)
+**Step 1:**
+- Lebenswerte Stadt: `Sichere Spielplätze, gute Schulen, bezahlbare Mieten`
+- Partner Interesse: `Will Kindern Umweltbewusstsein beibringen`
+
+**Step 2:**
+- Themen: Food, Climate Education
+- Subtopics: Local Production, Urban Farming
+- Notizen: `Zwei Kinder, 8 und 12 Jahre`
+- Bezirk: Neukölln
+
+**Step 3:**
+- Initiative Types: Urban Garden, Climate Education
+- Selected: Tempelhofer Feld Gärten, Umweltbildung Neukölln
+
+**Step 4:**
+- Name: Michael, Surname: Schmidt
+- Email: m.schmidt@email.de, Phone: +49 30 87654321
+- Consent: Yes, Data Protection: Nur anonyme Metadaten speichern
+
+**Step 5:**
+- Reflexion: `Kinder sollen Natur verstehen lernen`
+- Personen: 3, Dauer: 30, Familie: family
+
+## Test 3: Senior Citizen (Charlottenburg)
+**Step 1:**
+- Lebenswerte Stadt: `Barrierefreie Zugänge, gute Gesundheitsversorgung`
+- Partner Interesse: `Möchte digitale Kompetenzen erlernen`
+
+**Step 2:**
+- Themen: Digital Inclusion, Mutual Aid
+- Subtopics: (none selected)
+- Notizen: `75 Jahre alt, sehr interessiert`
+- Bezirk: Charlottenburg
+
+**Step 3:**
+- Initiative Types: Digital Inclusion, Mutual Aid
+- Selected: Tech for All Charlottenburg, Community Care Charlottenburg
+
+**Step 4:**
+- Name: Gertrud, Surname: Müller
+- Email: g.mueller@email.de, Phone: +49 30 55667788
+- Consent: Yes, Data Protection: Vollständigen Dialog speichern
+
+**Step 5:**
+- Reflexion: `Nie zu alt zum Lernen!`
+- Personen: 1, Dauer: 25, Familie: single
+
+## Test 4: Environmental Activist (Kreuzberg)
+**Step 1:**
+- Lebenswerte Stadt: `Null Emissionen, viele Bäume, Urban Farming überall`
+- Partner Interesse: `Klimaaktivistin, organisiert Demos`
+
+**Step 2:**
+- Themen: Klimaanpassung, Building Transition, Food
+- Subtopics: Heat, Trees, Concrete, Waste, Organic
+- Notizen: `Sehr engagiert, Fridays for Future`
+- Bezirk: Kreuzberg
+
+**Step 3:**
+- Initiative Types: Policy Advocacy, Climate Education, Urban Garden
+- Selected: Citizens for Kreuzberg, Eco Education Kreuzberg, Kreuzberg Community Garden
+
+**Step 4:**
+- Name: Sarah, Surname: Green
+- Email: sarah.green@email.de, Phone: +49 30 11223344
+- Consent: Yes, Data Protection: Vollständigen Dialog speichern
+
+**Step 5:**
+- Reflexion: `Jeder muss handeln, bevor es zu spät ist`
+- Personen: 2, Dauer: 45, Familie: single
+
+## Test 5: Tech Worker (Prenzlauer Berg)
+**Step 1:**
+- Lebenswerte Stadt: `Schnelles Internet, moderne Infrastruktur, Work-Life-Balance`
+- Partner Interesse: `Entwickelt Apps für Nachhaltigkeit`
+
+**Step 2:**
+- Themen: Digital Inclusion, Mobilität
+- Subtopics: Electric Car, Public Transport
+- Notizen: `Arbeitet remote, sehr technikaffin`
+- Bezirk: Prenzlauer Berg
+
+**Step 3:**
+- Initiative Types: Digital Inclusion, Policy Advocacy
+- Selected: Prenzlauer Berg Digital Hub, Citizens for Prenzlauer Berg
+
+**Step 4:**
+- Name: Alex, Surname: Code
+- Email: alex.code@email.de, Phone: +49 30 99887766
+- Consent: Yes, Data Protection: Nur anonyme Metadaten speichern
+
+**Step 5:**
+- Reflexion: `Technologie kann Klimaschutz unterstützen`
+- Personen: 1, Dauer: 15, Familie: single
+
+## Test 6: Retired Teacher (Wedding)
+**Step 1:**
+- Lebenswerte Stadt: `Bildungsangebote für alle Altersgruppen, Bibliotheken`
+- Partner Interesse: `Möchte Erwachsenenbildung im Umweltbereich machen`
+
+**Step 2:**
+- Themen: Climate Education, Heating Transition
+- Subtopics: Openness to Technology, District Heating
+- Notizen: `40 Jahre Lehrerin gewesen`
+- Bezirk: Wedding
+
+**Step 3:**
+- Initiative Types: Climate Education, Digital Inclusion
+- Selected: Wedding Climate Hub, Wedding Digital Hub
+
+**Step 4:**
+- Name: Ingrid, Surname: Lehr
+- Email: i.lehr@email.de, Phone: +49 30 44556677
+- Consent: Yes, Data Protection: Vollständigen Dialog speichern
+
+**Step 5:**
+- Reflexion: `Bildung ist der Schlüssel zum Wandel`
+- Personen: 1, Dauer: 35, Familie: single
+
+## Test 7: Student (Friedrichshain)
+**Step 1:**
+- Lebenswerte Stadt: `Günstige Mieten, viele Parks, lebendiges Nachtleben`
+- Partner Interesse: `Studiert Umweltwissenschaften, sehr idealistisch`
+
+**Step 2:**
+- Themen: Wohnen/Bauwende, Food
+- Subtopics: Affordability, Gentrification, Food Waste
+- Notizen: `WG-Leben, wenig Geld aber viele Ideen`
+- Bezirk: Friedrichshain
+
+**Step 3:**
+- Initiative Types: Urban Garden, Mutual Aid
+- Selected: Friedrichshain Community Garden, Friedrichshain Solidarity
+
+**Step 4:**
+- Name: Tom, Surname: Student
+- Email: tom.student@email.de, Phone: +49 30 33445566
+- Consent: Yes, Data Protection: Nur anonyme Metadaten speichern
+
+**Step 5:**
+- Reflexion: `Als Student kann ich Zeit statt Geld investieren`
+- Personen: 4, Dauer: 40, Familie: single
+
+## Test 8: Small Business Owner (Schöneberg)
+**Step 1:**
+- Lebenswerte Stadt: `Unterstützung für lokale Unternehmen, wenig Bürokratie`
+- Partner Interesse: `Betreibt Café, will nachhaltiger werden`
+
+**Step 2:**
+- Themen: Food, Building Transition
+- Subtopics: Local Production, Energy Efficiency, Costs
+- Notizen: `Café seit 5 Jahren, 8 Mitarbeiter`
+- Bezirk: Schöneberg
+
+**Step 3:**
+- Initiative Types: Repair Café, Urban Garden
+- Selected: Repair Café Schöneberg, Schöneberg Community Garden
+
+**Step 4:**
+- Name: Maria, Surname: Café
+- Email: maria.cafe@email.de, Phone: +49 30 77665544
+- Consent: Yes, Data Protection: Vollständigen Dialog speichern
+
+**Step 5:**
+- Reflexion: `Unternehmen haben Verantwortung für Umwelt`
+- Personen: 2, Dauer: 25, Familie: family
+
+## Test 9: Immigrant Family (Tempelhof)
+**Step 1:**
+- Lebenswerte Stadt: `Integration, Sprachkurse, kulturelle Akzeptanz`
+- Partner Interesse: `Neue Familie aus Syrien, will sich integrieren`
+
+**Step 2:**
+- Themen: Digital Inclusion, Mutual Aid
+- Subtopics: (none selected)
+- Notizen: `Sprechen noch wenig Deutsch`
+- Bezirk: Tempelhof
+
+**Step 3:**
+- Initiative Types: Digital Inclusion, Mutual Aid
+- Selected: Tempelhof Digital Hub, Community Care Tempelhof
+
+**Step 4:**
+- Name: Ahmad, Surname: Hassan
+- Email: ahmad.hassan@email.de, Phone: +49 30 22334455
+- Consent: Yes, Data Protection: Nur anonyme Metadaten speichern
+
+**Step 5:**
+- Reflexion: `Deutschland ist unsere neue Heimat`
+- Personen: 5, Dauer: 50, Familie: family
+
+## Test 10: Artist (Steglitz)
+**Step 1:**
+- Lebenswerte Stadt: `Kreative Freiräume, bezahlbare Ateliers, Kunstförderung`
+- Partner Interesse: `Macht Kunst aus Recycling-Materialien`
+
+**Step 2:**
+- Themen: Building Transition, Repair Café
+- Subtopics: Waste, Existing Stock
+- Notizen: `Bildhauerin, arbeitet mit Müll`
+- Bezirk: Steglitz
+
+**Step 3:**
+- Initiative Types: Repair Café, Urban Garden
+- Selected: Repair Café Steglitz, Steglitz Green Space
+
+**Step 4:**
+- Name: Julia, Surname: Art
+- Email: julia.art@email.de, Phone: +49 30 88776655
+- Consent: Yes, Data Protection: Vollständigen Dialog speichern
+
+**Step 5:**
+- Reflexion: `Kunst kann Menschen zum Umdenken bewegen`
+- Personen: 1, Dauer: 30, Familie: single
+
+## Test 11: Healthcare Worker (Mitte)
+**Step 1:**
+- Lebenswerte Stadt: `Gesunde Luft, weniger Stress, mehr Grün für Gesundheit`
+- Partner Interesse: `Krankenschwester, sieht Klimawandel-Auswirkungen auf Gesundheit`
+
+**Step 2:**
+- Themen: Klimaanpassung, Mobilität
+- Subtopics: Heat, Health, Air Quality
+- Notizen: `Arbeitet in Notaufnahme, sieht Hitzeopfer`
+- Bezirk: Mitte
+
+**Step 3:**
+- Initiative Types: Climate Education, Policy Advocacy
+- Selected: BUND Umweltbildung, Klimaneustart Berlin
+
+**Step 4:**
+- Name: Anna, Surname: Health
+- Email: anna.health@email.de, Phone: +49 30 66554433
+- Consent: Yes, Data Protection: Vollständigen Dialog speichern
+
+**Step 5:**
+- Reflexion: `Klimaschutz ist Gesundheitsschutz`
+- Personen: 1, Dauer: 20, Familie: single
+
+## Test 12: Construction Worker (Neukölln)
+**Step 1:**
+- Lebenswerte Stadt: `Sichere Arbeitsplätze, gute Löhne, weniger Baustellen-Chaos`
+- Partner Interesse: `Baut energieeffiziente Häuser, kennt sich mit Dämmung aus`
+
+**Step 2:**
+- Themen: Building Transition, Heating Transition
+- Subtopics: Energy Efficiency, Renovation, Heat Pumps, Insulation
+- Notizen: `20 Jahre Bauerfahrung, Spezialist Sanierung`
+- Bezirk: Neukölln
+
+**Step 3:**
+- Initiative Types: Climate Education, Repair Café
+- Selected: Grüne Liga Berlin, Werkstatt der Kulturen
+
+**Step 4:**
+- Name: Klaus, Surname: Bau
+- Email: klaus.bau@email.de, Phone: +49 30 55443322
+- Consent: Yes, Data Protection: Nur anonyme Metadaten speichern
+
+**Step 5:**
+- Reflexion: `Handwerk ist wichtig für Energiewende`
+- Personen: 1, Dauer: 25, Familie: family
+
+## Test 13: Single Parent (Kreuzberg)
+**Step 1:**
+- Lebenswerte Stadt: `Gute Kinderbetreuung, flexible Arbeitszeiten, Unterstützung`
+- Partner Interesse: `Alleinerziehend, braucht Gemeinschaft und Hilfe`
+
+**Step 2:**
+- Themen: Mutual Aid, Food
+- Subtopics: Food Waste, Sustainable Diet
+- Notizen: `Ein Kind, 6 Jahre, arbeitet Teilzeit`
+- Bezirk: Kreuzberg
+
+**Step 3:**
+- Initiative Types: Mutual Aid, Urban Garden
+- Selected: Kreuzberg Solidarity, Kreuzberg Community Garden
+
+**Step 4:**
+- Name: Sandra, Surname: Solo
+- Email: sandra.solo@email.de, Phone: +49 30 99887755
+- Consent: Yes, Data Protection: Vollständigen Dialog speichern
+
+**Step 5:**
+- Reflexion: `Gemeinschaft macht stark`
+- Personen: 2, Dauer: 35, Familie: family
+
+## Test 14: Pensioner Couple (Charlottenburg)
+**Step 1:**
+- Lebenswerte Stadt: `Ruhige Nachbarschaft, gute Ärzte, kulturelle Angebote`
+- Partner Interesse: `Rentner-Ehepaar, viel Zeit, will sich engagieren`
+
+**Step 2:**
+- Themen: Climate Education, Digital Inclusion
+- Subtopics: (none selected)
+- Notizen: `Beide 68 Jahre, sehr fit und motiviert`
+- Bezirk: Charlottenburg
+
+**Step 3:**
+- Initiative Types: Climate Education, Digital Inclusion, Mutual Aid
+- Selected: Eco Education Charlottenburg, Charlottenburg Digital Hub, Community Care Charlottenburg
+
+**Step 4:**
+- Name: Hans, Surname: Rentner
+- Email: hans.rentner@email.de, Phone: +49 30 11223366
+- Consent: Yes, Data Protection: Vollständigen Dialog speichern
+
+**Step 5:**
+- Reflexion: `Im Ruhestand endlich Zeit für wichtige Dinge`
+- Personen: 2, Dauer: 45, Familie: family
+
+## Test 15: Startup Founder (Prenzlauer Berg)
+**Step 1:**
+- Lebenswerte Stadt: `Innovation fördern, Startup-Ökosystem, nachhaltiges Wirtschaften`
+- Partner Interesse: `Gründet CleanTech-Startup, sucht Investoren und Partner`
+
+**Step 2:**
+- Themen: Building Transition, Digital Inclusion, Policy Advocacy
+- Subtopics: Innovation, Technology, Costs
+- Notizen: `5-köpfiges Team, App für Energiesparen`
+- Bezirk: Prenzlauer Berg
+
+**Step 3:**
+- Initiative Types: Policy Advocacy, Digital Inclusion, Climate Education
+- Selected: Citizens for Prenzlauer Berg, Prenzlauer Berg Digital Hub, Prenzlauer Berg Climate Hub
+
+**Step 4:**
+- Name: Max, Surname: Startup
+- Email: max.startup@email.de, Phone: +49 30 77889911
+- Consent: Yes, Data Protection: Vollständigen Dialog speichern
+
+**Step 5:**
+- Reflexion: `Business und Klimaschutz müssen zusammengehen`
+- Personen: 1, Dauer: 30, Familie: single
+
+## Quick Test Scenarios
+
+### Minimal Input Test
+- Step 1: `Grün` / `Fahrrad`
+- Step 2: Food / Mitte
+- Step 3: Urban Garden / Prinzessinnengarten
+- Step 4: test@email.de
+- Step 5: `Ok` / 1 / 5 / single
+
+### Maximum Input Test
+- Step 1: Very long texts (500+ chars each)
+- Step 2: All topics + all subtopics + full notes
+- Step 3: All initiative types + multiple selections
+- Step 4: Complete contact info + full data storage
+- Step 5: Long reflection + 10 people + 90 minutes + family
+
+### Skip Step 3 Test
+- Step 1-2: Normal input
+- Step 3: Click "Skip this step"
+- Step 4-5: Normal completion
+
+### No Contact Test
+- Step 1-3: Normal input
+- Step 4: No email/phone, consent = no
+- Step 5: Complete normally
