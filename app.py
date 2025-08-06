@@ -33,6 +33,10 @@ class ContactShare(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 @app.route('/')
+def root():
+    return redirect(url_for('login'))
+
+@app.route('/index')
 def index():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -59,10 +63,8 @@ def logout():
 
 @app.route('/start')
 def start_dialogue():
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    # Clear dialogue session but keep login status
-    dialogue_keys = [k for k in session.keys() if k != 'logged_in']
+    # Clear dialogue session
+    dialogue_keys = [k for k in session.keys() if k not in ['logged_in', 'last_dialogue_id']]
     for key in dialogue_keys:
         session.pop(key, None)
     return render_template('step1.html')
