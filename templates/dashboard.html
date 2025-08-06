@@ -55,10 +55,10 @@
                 {% for dialogue in dialogues[:10] %}
                 <div style="background: white; margin: 10px 0; padding: 15px; border-radius: 8px; border-left: 4px solid #4CAF50;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <strong>{{ dialogue.district or 'Unbekannter Bezirk' }}</strong>
-                        <small style="color: #666;">{{ dialogue.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                        <strong>Dialog #{{ dialogue.id }}</strong>
+                        <small style="color: #666;">{{ dialogue.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
                     </div>
-                    <p style="margin: 5px 0;"><strong>Themen:</strong> {{ dialogue.topics|join(', ') or 'Keine Themen' }}</p>
+                    <p style="margin: 5px 0;"><strong>Themen:</strong> Neue Schema - Themen werden anders gespeichert</p>
                     <p style="margin: 5px 0;"><strong>Dauer:</strong> {{ dialogue.duration }} Min | <strong>Personen:</strong> {{ dialogue.num_people }}</p>
                     {% if dialogue.notes %}
                     <p style="margin: 5px 0; font-style: italic;">"{{ dialogue.notes }}"</p>

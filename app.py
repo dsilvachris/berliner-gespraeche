@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_file, make_response
-from flask_sqlalchemy import SQLAlchemy
 import qrcode
 import io
 import base64
@@ -12,37 +11,17 @@ from reportlab.lib.pagesizes import letter, A4
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
+from models import *
 
 app = Flask(__name__)
 app.secret_key = 'berliner_gespraeche_secret_key'
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///berliner_gespraeche.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///berliner_gespraeche_new.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+db.init_app(app)
 
-# Database Models
-class Dialogue(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    livable_city = db.Column(db.Text)
-    partner_interest = db.Column(db.Text)
-    topics = db.Column(db.JSON)
-    subtopics = db.Column(db.JSON)
-    notes = db.Column(db.String(100))
-    district = db.Column(db.String(50))
-    initiatives = db.Column(db.JSON)
-    reflection = db.Column(db.Text)
-    num_people = db.Column(db.Integer)
-    duration = db.Column(db.Integer)
-    family_status = db.Column(db.String(50))
-    name = db.Column(db.String(100))
-    surname = db.Column(db.String(100))
-    email = db.Column(db.String(120))
-    phone = db.Column(db.String(20))
-    consent = db.Column(db.String(10))
-    data_protection = db.Column(db.String(20))
-
+# Legacy ContactShare model (keeping for QR code functionality)
 class ContactShare(db.Model):
     id = db.Column(db.String(50), primary_key=True)
     district = db.Column(db.String(50))
@@ -519,34 +498,15 @@ def review_post():
 
 @app.route('/complete')
 def complete_dialogue():
-    # Save dialogue to database
-    final_district = session.get('district', '')
+    from services import DialogueService, UserService
     
-    dialogue = Dialogue(
-        livable_city=session.get('livable_city', ''),
-        partner_interest=session.get('partner_interest', ''),
-        topics=session.get('topics', []),
-        subtopics=session.get('subtopics', []),
-        notes=session.get('notes', ''),
-        district=final_district,
-        initiatives=session.get('selected_initiatives', []),
-        reflection=session.get('reflection', ''),
-        num_people=int(session.get('num_people', 1)),
-        duration=int(session.get('duration', 0)),
-        family_status=session.get('family_status', ''),
-        name=session.get('name', ''),
-        surname=session.get('surname', ''),
-        email=session.get('email', ''),
-        phone=session.get('phone', ''),
-        consent=session.get('consent', ''),
-        data_protection=session.get('data_protection', '')
-    )
+    # Get admin user
+    admin_user = UserService.get_or_create_admin()
     
-    db.session.add(dialogue)
-    db.session.commit()
+    # Create dialogue using service layer
+    dialogue_id = DialogueService.create_dialogue(session, admin_user.id)
     
     # Store dialogue ID for PDF download
-    dialogue_id = dialogue.id
     session.clear()
     session['last_dialogue_id'] = dialogue_id
     
@@ -556,53 +516,28 @@ def complete_dialogue():
 def dashboard():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
-    dialogues = Dialogue.query.order_by(Dialogue.timestamp.desc()).all()
     
-    # Calculate dashboard data
-    total_partners = sum(d.num_people for d in dialogues)
-    total_duration = sum(d.duration for d in dialogues)
+    from services import DialogueService
+    dashboard_data = DialogueService.get_dashboard_data()
     
-    topics = {}
-    districts = {}
-    
-    for dialogue in dialogues:
-        if dialogue.topics:
-            for topic in dialogue.topics:
-                topics[topic] = topics.get(topic, 0) + 1
-        if dialogue.district:
-            districts[dialogue.district] = districts.get(dialogue.district, 0) + 1
-    
-    dashboard_data = {
-        'total_partners': total_partners,
-        'total_duration': total_duration,
-        'topics': topics,
-        'districts': districts
-    }
-    
-    return render_template('dashboard.html', data=dashboard_data, dialogues=dialogues)
+    return render_template('dashboard.html', data=dashboard_data, dialogues=dashboard_data['dialogues'])
 
 @app.route('/export/excel')
 def export_excel():
-    dialogues = Dialogue.query.order_by(Dialogue.timestamp.desc()).all()
+    from services import DialogueService
+    dialogues = Dialogue.query.order_by(Dialogue.created_at.desc()).all()
     
     data = []
     for d in dialogues:
         data.append({
             'ID': d.id,
-            'Timestamp': d.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
-            'Lebenswerte Stadt': d.livable_city,
-            'Partner Interesse': d.partner_interest,
-            'Themen': ', '.join(d.topics) if d.topics else '',
-            'Notizen': d.notes,
-            'Bezirk': d.district,
-            'Initiativen': ', '.join(d.initiatives) if d.initiatives else '',
-            'Reflexion': d.reflection,
-            'Anzahl Personen': d.num_people,
-            'Dauer (Min)': d.duration,
-            'Email': d.email,
-            'Telefon': d.phone,
-            'Einverständnis': d.consent,
-            'Datenschutz': d.data_protection
+            'Timestamp': d.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'Notes': d.notes or '',
+            'Observer Reflection': d.observer_reflection or '',
+            'Num People': d.num_people,
+            'Duration': d.duration,
+            'Anonymous': d.is_anonymous,
+            'Consent Share Contact': d.consent_share_contact
         })
     
     df = pd.DataFrame(data)
@@ -621,26 +556,55 @@ def export_excel():
 
 @app.route('/export/csv')
 def export_csv():
-    dialogues = Dialogue.query.order_by(Dialogue.timestamp.desc()).all()
+    dialogues = Dialogue.query.order_by(Dialogue.created_at.desc()).all()
     
     data = []
     for d in dialogues:
+        # Get districts
+        districts = [dd.district_name for dd in DialogueDistrict.query.filter_by(dialogue_id=d.id)]
+        
+        # Get interest areas
+        interest_areas = []
+        for dia in DialogueInterestArea.query.filter_by(dialogue_id=d.id):
+            theme = Theme.query.get(dia.interest_area_id)
+            if theme:
+                interest_areas.append(theme.name)
+        
+        # Get topics
+        topics = []
+        for ts in DialogueTopicSelection.query.filter_by(dialogue_id=d.id, sub_group_id='main'):
+            topics.append(ts.selected_option_id.replace('_', ' ').title())
+        
+        # Get subtopics
+        subtopics = []
+        for ts in DialogueTopicSelection.query.filter_by(dialogue_id=d.id, sub_group_id='detail'):
+            subtopics.append(ts.selected_option_id.replace('_', ' ').title())
+        
+        # Get contact info if available
+        contact_info = {}
+        if d.consent_share_contact:
+            contact = ParticipantContact.query.get(d.id)
+            if contact:
+                import json
+                contact_info = json.loads(contact.contact_info)
+        
         data.append({
             'ID': d.id,
-            'Timestamp': d.timestamp.strftime('%Y-%m-%d %H:%M:%S'),
-            'Lebenswerte Stadt': d.livable_city,
-            'Partner Interesse': d.partner_interest,
-            'Themen': ', '.join(d.topics) if d.topics else '',
-            'Notizen': d.notes,
-            'Bezirk': d.district,
-            'Initiativen': ', '.join(d.initiatives) if d.initiatives else '',
-            'Reflexion': d.reflection,
-            'Anzahl Personen': d.num_people,
-            'Dauer (Min)': d.duration,
-            'Email': d.email,
-            'Telefon': d.phone,
-            'Einverständnis': d.consent,
-            'Datenschutz': d.data_protection
+            'Timestamp': d.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'Districts': ', '.join(districts),
+            'Interest Areas': ', '.join(interest_areas),
+            'Topics': ', '.join(topics),
+            'Subtopics': ', '.join(subtopics),
+            'Notes': d.notes or '',
+            'Observer Reflection': d.observer_reflection or '',
+            'Num People': d.num_people,
+            'Duration': d.duration,
+            'Anonymous': d.is_anonymous,
+            'Consent Share Contact': d.consent_share_contact,
+            'Name': contact_info.get('name', '') if contact_info else '',
+            'Email': contact_info.get('email', '') if contact_info else '',
+            'Phone': contact_info.get('phone', '') if contact_info else '',
+            'Family Status': contact_info.get('family_status', '') if contact_info else ''
         })
     
     df = pd.DataFrame(data)
@@ -661,7 +625,12 @@ def download_dialogue_pdf():
     if not dialogue_id:
         return redirect(url_for('index'))
     
-    dialogue = Dialogue.query.get_or_404(dialogue_id)
+    from services import DialogueService
+    dialogue_data = DialogueService.get_dialogue_summary(dialogue_id)
+    if not dialogue_data:
+        return redirect(url_for('index'))
+    
+    dialogue = dialogue_data['dialogue']
     
     # Create PDF
     buffer = io.BytesIO()
@@ -675,11 +644,15 @@ def download_dialogue_pdf():
     story.append(Spacer(1, 12))
     
     # Dialogue details
-    story.append(Paragraph(f"<b>Datum:</b> {dialogue.timestamp.strftime('%d.%m.%Y %H:%M')}", styles['Normal']))
-    story.append(Paragraph(f"<b>Bezirk:</b> {dialogue.district or 'Nicht angegeben'}", styles['Normal']))
-    if dialogue.family_status:
-        family_text = 'Alleinstehend' if dialogue.family_status == 'single' else 'Mit Familie'
+    story.append(Paragraph(f"<b>Datum:</b> {dialogue.created_at.strftime('%d.%m.%Y %H:%M')}", styles['Normal']))
+    districts_text = ', '.join(dialogue_data['districts']) if dialogue_data['districts'] else 'Nicht angegeben'
+    story.append(Paragraph(f"<b>Bezirk:</b> {districts_text}", styles['Normal']))
+    
+    # Get family status from contact info if available
+    if dialogue_data['contact_info'] and dialogue_data['contact_info'].get('family_status'):
+        family_text = 'Alleinstehend' if dialogue_data['contact_info']['family_status'] == 'single' else 'Mit Familie'
         story.append(Paragraph(f"<b>Familienstatus:</b> {family_text}", styles['Normal']))
+    
     story.append(Paragraph(f"<b>Anzahl Personen:</b> {dialogue.num_people}", styles['Normal']))
     story.append(Paragraph(f"<b>Dauer:</b> {dialogue.duration} Minuten", styles['Normal']))
     story.append(Spacer(1, 20))
@@ -693,39 +666,39 @@ def download_dialogue_pdf():
     story.append(Paragraph(dialogue.partner_interest or 'Keine Angabe', styles['Normal']))
     story.append(Spacer(1, 20))
     
-    # Step 2
+    # Step 2 - Topics
     story.append(Paragraph("<b>2. Diskutierte Themen:</b>", styles['Heading2']))
-    topics_text = ', '.join(dialogue.topics) if dialogue.topics else 'Keine Themen ausgewählt'
+    topics_text = ', '.join(dialogue_data['topics']) if dialogue_data['topics'] else 'Keine Themen ausgewählt'
     story.append(Paragraph(topics_text, styles['Normal']))
-    if dialogue.subtopics:
-        subtopics_text = ', '.join(dialogue.subtopics)
+    if dialogue_data['subtopics']:
+        subtopics_text = ', '.join(dialogue_data['subtopics'])
         story.append(Paragraph(f"<b>Unterthemen:</b> {subtopics_text}", styles['Normal']))
     if dialogue.notes:
         story.append(Paragraph(f"<b>Notizen:</b> {dialogue.notes}", styles['Normal']))
     story.append(Spacer(1, 20))
     
-    # Step 3
-    story.append(Paragraph("<b>3. Ausgewählte Initiativen:</b>", styles['Heading2']))
-    initiatives_text = ', '.join(dialogue.initiatives) if dialogue.initiatives else 'Keine Initiativen ausgewählt'
-    story.append(Paragraph(initiatives_text, styles['Normal']))
+    # Step 3 - Interest Areas
+    story.append(Paragraph("<b>3. Interessensbereiche:</b>", styles['Heading2']))
+    interest_areas_text = ', '.join(dialogue_data['interest_areas']) if dialogue_data['interest_areas'] else 'Keine Bereiche ausgewählt'
+    story.append(Paragraph(interest_areas_text, styles['Normal']))
     story.append(Spacer(1, 20))
     
-    # Step 5
-    if dialogue.reflection:
+    # Step 5 - Reflection
+    if dialogue.observer_reflection:
         story.append(Paragraph("<b>4. Reflexion:</b>", styles['Heading2']))
-        story.append(Paragraph(dialogue.reflection, styles['Normal']))
+        story.append(Paragraph(dialogue.observer_reflection, styles['Normal']))
         story.append(Spacer(1, 20))
     
     # Contact info (if consent given)
-    if dialogue.consent == 'yes':
+    if dialogue.consent_share_contact and dialogue_data['contact_info']:
         story.append(Paragraph("<b>Kontaktdaten:</b>", styles['Heading2']))
-        if dialogue.name or dialogue.surname:
-            name_text = f"{dialogue.name or ''} {dialogue.surname or ''}".strip()
-            story.append(Paragraph(f"Name: {name_text}", styles['Normal']))
-        if dialogue.email:
-            story.append(Paragraph(f"Email: {dialogue.email}", styles['Normal']))
-        if dialogue.phone:
-            story.append(Paragraph(f"Telefon: {dialogue.phone}", styles['Normal']))
+        contact = dialogue_data['contact_info']
+        if contact.get('name'):
+            story.append(Paragraph(f"Name: {contact['name']}", styles['Normal']))
+        if contact.get('email'):
+            story.append(Paragraph(f"Email: {contact['email']}", styles['Normal']))
+        if contact.get('phone'):
+            story.append(Paragraph(f"Telefon: {contact['phone']}", styles['Normal']))
     
     doc.build(story)
     buffer.seek(0)
@@ -733,7 +706,7 @@ def download_dialogue_pdf():
     return send_file(
         io.BytesIO(buffer.read()),
         as_attachment=True,
-        download_name=f'dialog_{dialogue.id}_{dialogue.timestamp.strftime("%Y%m%d_%H%M%S")}.pdf',
+        download_name=f'dialog_{dialogue.id}_{dialogue.created_at.strftime("%Y%m%d_%H%M%S")}.pdf',
         mimetype='application/pdf'
     )
 
