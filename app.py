@@ -12,6 +12,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from models import *
+from api_routes import api
 
 app = Flask(__name__)
 app.secret_key = 'berliner_gespraeche_secret_key'
@@ -20,6 +21,9 @@ app.secret_key = 'berliner_gespraeche_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///berliner_gespraeche_new.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
+
+# Register API blueprint
+app.register_blueprint(api)
 
 # Legacy ContactShare model (keeping for QR code functionality)
 class ContactShare(db.Model):
