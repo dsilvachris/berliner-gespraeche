@@ -31,7 +31,15 @@ class MongoConfig:
             except:
                 pass  # Use original URI if parsing fails
         
-        client = MongoClient(uri)
+        # SSL/TLS configuration for Atlas
+        client = MongoClient(
+            uri,
+            tls=True,
+            tlsAllowInvalidCertificates=False,
+            serverSelectionTimeoutMS=30000,
+            connectTimeoutMS=30000,
+            socketTimeoutMS=30000
+        )
         return client[MongoConfig.DATABASE_NAME]
 
 # Global database instance
