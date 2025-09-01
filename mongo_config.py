@@ -8,7 +8,7 @@ import os
 
 class MongoConfig:
     # MongoDB connection settings
-    MONGO_URI = os.getenv('MONGO_URI', 'mongodb://localhost:27017/')
+    MONGO_URI = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/')
     DATABASE_NAME = os.getenv('MONGO_DB_NAME', 'berliner_gespraeche')
     
     @staticmethod

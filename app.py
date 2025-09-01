@@ -16,7 +16,7 @@ from mongo_services import *
 from bson import ObjectId
 
 app = Flask(__name__)
-app.secret_key = 'berliner_gespraeche_secret_key'
+app.secret_key = os.getenv('SECRET_KEY', 'berliner_gespraeche_secret_key')
 
 @app.route('/')
 def root():
@@ -660,31 +660,34 @@ def download_dialogue_pdf():
         mimetype='application/pdf'
     )
 
+# Initialize MongoDB on startup
+try:
+    from mongo_setup import setup_database
+    setup_database()
+except Exception as e:
+    print(f"MongoDB setup warning: {e}")
+
 if __name__ == '__main__':
-    # Initialize MongoDB
-    try:
-        from mongo_setup import setup_database
-        setup_database()
-    except Exception as e:
-        print(f"MongoDB setup warning: {e}")
-        print("Make sure MongoDB is running on localhost:27017")
+    port = int(os.getenv('PORT', 5000))
+    debug = os.getenv('FLASK_ENV') != 'production'
     
-    print("\n" + "="*50)
-    print("MongoDB Berliner Gespräche Server starting...")
-    print("Database: MongoDB (berliner_gespraeche)")
-    print("For mobile access, use your network IP:")
+    if debug:
+        print("\n" + "="*50)
+        print("MongoDB Berliner Gespräche Server starting...")
+        print("Database: MongoDB (berliner_gespraeche)")
+        print("For mobile access, use your network IP:")
+        
+        import socket
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            network_ip = s.getsockname()[0]
+            s.close()
+            print(f"   http://{network_ip}:{port}")
+        except:
+            print("   Network IP detection failed")
+        
+        print(f"For local access: http://localhost:{port}")
+        print("="*50 + "\n")
     
-    import socket
-    try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("8.8.8.8", 80))
-        network_ip = s.getsockname()[0]
-        s.close()
-        print(f"   http://{network_ip}:5000")
-    except:
-        print("   Network IP detection failed")
-    
-    print("For local access: http://localhost:5000")
-    print("="*50 + "\n")
-    
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=debug, host='0.0.0.0', port=port)
