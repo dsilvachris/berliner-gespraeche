@@ -315,19 +315,21 @@ def contact_info():
                     break
     
     # Generate QR code with URL to public contact page
+    # Use request host to make it accessible from mobile devices
     host = request.host
     if 'localhost' in host or '127.0.0.1' in host:
+        # Try to get network IP for mobile access
         import socket
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.connect(("8.8.8.8", 80))
             network_ip = s.getsockname()[0]
             s.close()
-            qr_url = f"http://{network_ip}:5000/public_contact/{str(contact_id)}"
+            qr_url = f"http://{network_ip}:5000/public_contact/{contact_id}"
         except:
-            qr_url = f"http://{host}/public_contact/{str(contact_id)}"
+            qr_url = f"http://{host}/public_contact/{contact_id}"
     else:
-        qr_url = f"http://{host}/public_contact/{str(contact_id)}"
+        qr_url = f"http://{host}/public_contact/{contact_id}"
     
     qr = qrcode.QRCode(version=1, box_size=8, border=4)
     qr.add_data(qr_url)
@@ -348,7 +350,7 @@ def contact_info():
 @app.route('/public_contact/<contact_id>')
 def public_contact(contact_id):
     # Get contact info from database
-    contact_share = ContactShareService.get_contact_share(contact_id)
+    contact_share = ContactShare.query.get(contact_id)
     
     if not contact_share:
         return render_template('contact_info.html', 
@@ -358,8 +360,8 @@ def public_contact(contact_id):
                              error="Contact information not found",
                              public_view=True)
     
-    selected_initiatives = contact_share.get('initiatives', [])
-    district = contact_share.get('district', '')
+    selected_initiatives = contact_share.initiatives or []
+    district = contact_share.district or ''
     
     # Get detailed initiative info
     initiative_details = []
@@ -393,6 +395,11 @@ def step3_post():
     
     session['initiative_types'] = request.form.getlist('initiative_types')
     session['selected_initiatives'] = request.form.getlist('selected_initiatives')
+    
+    # Debug: Print what was submitted
+    print(f"Initiative types: {session.get('initiative_types', [])}")
+    print(f"Selected initiatives: {session.get('selected_initiatives', [])}")
+    print(f"All form data: {dict(request.form)}")
     
     if 'show_qr' in request.form:
         return redirect(url_for('contact_info'))
@@ -469,20 +476,23 @@ def review_post():
     session['surname'] = request.form.get('surname', '')
     session['email'] = request.form.get('email', '')
     session['phone'] = request.form.get('phone', '')
+
     
     return redirect(url_for('complete_dialogue'))
 
 @app.route('/complete')
 def complete_dialogue():
+    from services import DialogueService, UserService
+    
     # Get admin user
     admin_user = UserService.get_or_create_admin()
     
     # Create dialogue using service layer
-    dialogue_id = DialogueService.create_dialogue(session, admin_user['_id'])
+    dialogue_id = DialogueService.create_dialogue(session, admin_user.id)
     
     # Store dialogue ID for PDF download
     session.clear()
-    session['last_dialogue_id'] = str(dialogue_id)
+    session['last_dialogue_id'] = dialogue_id
     
     return render_template('thank_you.html')
 
@@ -491,25 +501,27 @@ def dashboard():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     
+    from services import DialogueService
     dashboard_data = DialogueService.get_dashboard_data()
     
     return render_template('dashboard.html', data=dashboard_data, dialogues=dashboard_data['dialogues'])
 
 @app.route('/export/excel')
 def export_excel():
-    dialogues = Dialogue.find()
+    from services import DialogueService
+    dialogues = Dialogue.query.order_by(Dialogue.created_at.desc()).all()
     
     data = []
     for d in dialogues:
         data.append({
-            'ID': str(d['_id']),
-            'Timestamp': d['created_at'].strftime('%Y-%m-%d %H:%M:%S'),
-            'Notes': d.get('notes', ''),
-            'Observer Reflection': d.get('observer_reflection', ''),
-            'Num People': d.get('num_people', 0),
-            'Duration': d.get('duration', 0),
-            'Anonymous': d.get('is_anonymous', True),
-            'Consent Share Contact': d.get('consent_share_contact', False)
+            'ID': d.id,
+            'Timestamp': d.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'Notes': d.notes or '',
+            'Observer Reflection': d.observer_reflection or '',
+            'Num People': d.num_people,
+            'Duration': d.duration,
+            'Anonymous': d.is_anonymous,
+            'Consent Share Contact': d.consent_share_contact
         })
     
     df = pd.DataFrame(data)
@@ -528,34 +540,55 @@ def export_excel():
 
 @app.route('/export/csv')
 def export_csv():
-    dialogues = Dialogue.find()
+    dialogues = Dialogue.query.order_by(Dialogue.created_at.desc()).all()
     
     data = []
     for d in dialogues:
-        # Get embedded data
-        districts = d.get('districts', [])
-        interest_areas = d.get('interest_areas', [])
-        topics = d.get('topics', [])
-        subtopics = d.get('subtopics', [])
-        contact_info = d.get('contact_info', {}) if d.get('consent_share_contact') else {}
+        # Get districts
+        districts = [dd.district_name for dd in DialogueDistrict.query.filter_by(dialogue_id=d.id)]
+        
+        # Get interest areas
+        interest_areas = []
+        for dia in DialogueInterestArea.query.filter_by(dialogue_id=d.id):
+            theme = Theme.query.get(dia.interest_area_id)
+            if theme:
+                interest_areas.append(theme.name)
+        
+        # Get topics
+        topics = []
+        for ts in DialogueTopicSelection.query.filter_by(dialogue_id=d.id, sub_group_id='main'):
+            topics.append(ts.selected_option_id.replace('_', ' ').title())
+        
+        # Get subtopics
+        subtopics = []
+        for ts in DialogueTopicSelection.query.filter_by(dialogue_id=d.id, sub_group_id='detail'):
+            subtopics.append(ts.selected_option_id.replace('_', ' ').title())
+        
+        # Get contact info if available
+        contact_info = {}
+        if d.consent_share_contact:
+            contact = ParticipantContact.query.get(d.id)
+            if contact:
+                import json
+                contact_info = json.loads(contact.contact_info)
         
         data.append({
-            'ID': str(d['_id']),
-            'Timestamp': d['created_at'].strftime('%Y-%m-%d %H:%M:%S'),
+            'ID': d.id,
+            'Timestamp': d.created_at.strftime('%Y-%m-%d %H:%M:%S'),
             'Districts': ', '.join(districts),
             'Interest Areas': ', '.join(interest_areas),
             'Topics': ', '.join(topics),
             'Subtopics': ', '.join(subtopics),
-            'Notes': d.get('notes', ''),
-            'Observer Reflection': d.get('observer_reflection', ''),
-            'Num People': d.get('num_people', 0),
-            'Duration': d.get('duration', 0),
-            'Anonymous': d.get('is_anonymous', True),
-            'Consent Share Contact': d.get('consent_share_contact', False),
-            'Name': contact_info.get('name', ''),
-            'Email': contact_info.get('email', ''),
-            'Phone': contact_info.get('phone', ''),
-            'Family Status': contact_info.get('family_status', '')
+            'Notes': d.notes or '',
+            'Observer Reflection': d.observer_reflection or '',
+            'Num People': d.num_people,
+            'Duration': d.duration,
+            'Anonymous': d.is_anonymous,
+            'Consent Share Contact': d.consent_share_contact,
+            'Name': contact_info.get('name', '') if contact_info else '',
+            'Email': contact_info.get('email', '') if contact_info else '',
+            'Phone': contact_info.get('phone', '') if contact_info else '',
+            'Family Status': contact_info.get('family_status', '') if contact_info else ''
         })
     
     df = pd.DataFrame(data)
@@ -576,6 +609,7 @@ def download_dialogue_pdf():
     if not dialogue_id:
         return redirect(url_for('index'))
     
+    from services import DialogueService
     dialogue_data = DialogueService.get_dialogue_summary(dialogue_id)
     if not dialogue_data:
         return redirect(url_for('index'))
@@ -594,7 +628,7 @@ def download_dialogue_pdf():
     story.append(Spacer(1, 12))
     
     # Dialogue details
-    story.append(Paragraph(f"<b>Datum:</b> {dialogue['created_at'].strftime('%d.%m.%Y %H:%M')}", styles['Normal']))
+    story.append(Paragraph(f"<b>Datum:</b> {dialogue.created_at.strftime('%d.%m.%Y %H:%M')}", styles['Normal']))
     districts_text = ', '.join(dialogue_data['districts']) if dialogue_data['districts'] else 'Nicht angegeben'
     story.append(Paragraph(f"<b>Bezirk:</b> {districts_text}", styles['Normal']))
     
@@ -603,17 +637,17 @@ def download_dialogue_pdf():
         family_text = 'Alleinstehend' if dialogue_data['contact_info']['family_status'] == 'single' else 'Mit Familie'
         story.append(Paragraph(f"<b>Familienstatus:</b> {family_text}", styles['Normal']))
     
-    story.append(Paragraph(f"<b>Anzahl Personen:</b> {dialogue.get('num_people', 0)}", styles['Normal']))
-    story.append(Paragraph(f"<b>Dauer:</b> {dialogue.get('duration', 0)} Minuten", styles['Normal']))
+    story.append(Paragraph(f"<b>Anzahl Personen:</b> {dialogue.num_people}", styles['Normal']))
+    story.append(Paragraph(f"<b>Dauer:</b> {dialogue.duration} Minuten", styles['Normal']))
     story.append(Spacer(1, 20))
     
     # Step 1
     story.append(Paragraph("<b>1. Lebenswerte Stadt:</b>", styles['Heading2']))
-    story.append(Paragraph(dialogue.get('livable_city', 'Keine Angabe'), styles['Normal']))
+    story.append(Paragraph(dialogue.livable_city or 'Keine Angabe', styles['Normal']))
     story.append(Spacer(1, 12))
     
     story.append(Paragraph("<b>Dialogpartner Interesse:</b>", styles['Heading2']))
-    story.append(Paragraph(dialogue.get('partner_interest', 'Keine Angabe'), styles['Normal']))
+    story.append(Paragraph(dialogue.partner_interest or 'Keine Angabe', styles['Normal']))
     story.append(Spacer(1, 20))
     
     # Step 2 - Topics
@@ -623,8 +657,8 @@ def download_dialogue_pdf():
     if dialogue_data['subtopics']:
         subtopics_text = ', '.join(dialogue_data['subtopics'])
         story.append(Paragraph(f"<b>Unterthemen:</b> {subtopics_text}", styles['Normal']))
-    if dialogue.get('notes'):
-        story.append(Paragraph(f"<b>Notizen:</b> {dialogue['notes']}", styles['Normal']))
+    if dialogue.notes:
+        story.append(Paragraph(f"<b>Notizen:</b> {dialogue.notes}", styles['Normal']))
     story.append(Spacer(1, 20))
     
     # Step 3 - Interest Areas
@@ -634,13 +668,13 @@ def download_dialogue_pdf():
     story.append(Spacer(1, 20))
     
     # Step 5 - Reflection
-    if dialogue.get('observer_reflection'):
+    if dialogue.observer_reflection:
         story.append(Paragraph("<b>4. Reflexion:</b>", styles['Heading2']))
-        story.append(Paragraph(dialogue['observer_reflection'], styles['Normal']))
+        story.append(Paragraph(dialogue.observer_reflection, styles['Normal']))
         story.append(Spacer(1, 20))
     
     # Contact info (if consent given)
-    if dialogue.get('consent_share_contact') and dialogue_data['contact_info']:
+    if dialogue.consent_share_contact and dialogue_data['contact_info']:
         story.append(Paragraph("<b>Kontaktdaten:</b>", styles['Heading2']))
         contact = dialogue_data['contact_info']
         if contact.get('name'):
@@ -656,22 +690,17 @@ def download_dialogue_pdf():
     return send_file(
         io.BytesIO(buffer.read()),
         as_attachment=True,
-        download_name=f'dialog_{dialogue["_id"]}_{dialogue["created_at"].strftime("%Y%m%d_%H%M%S")}.pdf',
+        download_name=f'dialog_{dialogue.id}_{dialogue.created_at.strftime("%Y%m%d_%H%M%S")}.pdf',
         mimetype='application/pdf'
     )
 
+
+
 if __name__ == '__main__':
-    # Initialize MongoDB
-    try:
-        from mongo_setup import setup_database
-        setup_database()
-    except Exception as e:
-        print(f"MongoDB setup warning: {e}")
-        print("Make sure MongoDB is running on localhost:27017")
-    
+    with app.app_context():
+        db.create_all()
     print("\n" + "="*50)
-    print("MongoDB Berliner Gespräche Server starting...")
-    print("Database: MongoDB (berliner_gespraeche)")
+    print("Server starting...")
     print("For mobile access, use your network IP:")
     
     import socket

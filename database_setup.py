@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
 """
 Database setup script for Sag doch mal, Berlin
-Run this script to create the SQLite database and tables
+Run this script to initialize MongoDB collections and seed data
 """
 
-from app import app, db
-
-def create_database():
-    """Create the SQLite database and tables"""
-    with app.app_context():
-        db.create_all()
-        print("SQLite database 'berliner_gespraeche.db' created successfully!")
-        print("All tables created")
+from mongo_setup import setup_database
 
 if __name__ == "__main__":
-    create_database()
-    print("Database setup complete!")
-    print("Database file: berliner_gespraeche.db")
+    setup_database()
+    print("MongoDB setup complete!")
+    print("Database: MongoDB (berliner_gespraeche)")
+    print("Make sure MongoDB is running on localhost:27017")
