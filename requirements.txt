@@ -5,4 +5,3 @@ Pillow
 pandas
 openpyxl
 reportlab
-gunicorn

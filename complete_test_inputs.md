@@ -45,7 +45,7 @@
 - Consent: Yes, Data Protection: Nur anonyme Metadaten speichern
 
 **Step 5:**
-- Reflexion: `Kinder sollen Natur verstehen lernen`
+- Reflexion: `  `
 - Personen: 3, Dauer: 30, Familie: family
 
 ## Test 3: Senior Citizen (Charlottenburg)

@@ -5,16 +5,13 @@ Document-based data structures replacing SQLAlchemy models
 
 from datetime import datetime
 from bson import ObjectId
-from mongo_config import get_db, COLLECTIONS
+from mongo_config import db, COLLECTIONS
 
 class BaseModel:
     """Base model with common MongoDB operations"""
     
     @classmethod
     def get_collection(cls):
-        db = get_db()
-        if db is None:
-            raise Exception("Database connection failed")
         return db[cls.collection_name]
     
     @classmethod

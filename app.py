@@ -16,7 +16,7 @@ from mongo_services import *
 from bson import ObjectId
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY', 'berliner_gespraeche_secret_key')
+app.secret_key = 'berliner_gespraeche_secret_key'
 
 @app.route('/')
 def root():
@@ -298,13 +298,8 @@ def contact_info():
                 first_initiative = list(INITIATIVES_DATA[district][init_type].keys())[0]
                 selected_initiatives.append(first_initiative)
     
-    # Store contact info in database for QR access (with error handling)
-    try:
-        contact_id = ContactShareService.create_contact_share(district, selected_initiatives)
-    except Exception as e:
-        print(f"Database error: {e}")
-        # Generate a temporary ID for QR code
-        contact_id = f"temp_{district}_{len(selected_initiatives)}"
+    # Store contact info in database for QR access
+    contact_id = ContactShareService.create_contact_share(district, selected_initiatives)
     
     # Get detailed initiative info for display on page
     initiative_details = []
@@ -353,18 +348,14 @@ def contact_info():
 @app.route('/public_contact/<contact_id>')
 def public_contact(contact_id):
     # Get contact info from database
-    try:
-        contact_share = ContactShareService.get_contact_share(contact_id)
-    except Exception as e:
-        print(f"Database error in public_contact: {e}")
-        contact_share = None
+    contact_share = ContactShareService.get_contact_share(contact_id)
     
     if not contact_share:
         return render_template('contact_info.html', 
                              initiative_details=[],
                              district='Unknown',
                              qr_code=None,
-                             error="Contact information not found or database unavailable",
+                             error="Contact information not found",
                              public_view=True)
     
     selected_initiatives = contact_share.get('initiatives', [])
@@ -483,22 +474,15 @@ def review_post():
 
 @app.route('/complete')
 def complete_dialogue():
-    try:
-        # Get admin user
-        admin_user = UserService.get_or_create_admin()
-        
-        # Create dialogue using service layer
-        dialogue_id = DialogueService.create_dialogue(session, admin_user['_id'])
-        
-        # Store dialogue ID for PDF download
-        session.clear()
-        session['last_dialogue_id'] = str(dialogue_id)
-        
-    except Exception as e:
-        print(f"Database error in complete_dialogue: {e}")
-        # Clear session anyway and continue without saving to database
-        session.clear()
-        session['last_dialogue_id'] = 'offline_mode'
+    # Get admin user
+    admin_user = UserService.get_or_create_admin()
+    
+    # Create dialogue using service layer
+    dialogue_id = DialogueService.create_dialogue(session, admin_user['_id'])
+    
+    # Store dialogue ID for PDF download
+    session.clear()
+    session['last_dialogue_id'] = str(dialogue_id)
     
     return render_template('thank_you.html')
 
@@ -507,20 +491,7 @@ def dashboard():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     
-    try:
-        dashboard_data = DialogueService.get_dashboard_data()
-    except Exception as e:
-        print(f"Database error in dashboard: {e}")
-        # Fallback data when database is unavailable
-        dashboard_data = {
-            'total_dialogues': 0,
-            'total_partners': 0,
-            'total_duration': 0,
-            'dialogues': [],
-            'district_stats': [],
-            'theme_stats': [],
-            'error': 'Database temporarily unavailable'
-        }
+    dashboard_data = DialogueService.get_dashboard_data()
     
     return render_template('dashboard.html', data=dashboard_data, dialogues=dashboard_data['dialogues'])
 
@@ -689,34 +660,31 @@ def download_dialogue_pdf():
         mimetype='application/pdf'
     )
 
-# Initialize MongoDB on startup
-try:
-    from mongo_setup import setup_database
-    setup_database()
-except Exception as e:
-    print(f"MongoDB setup warning: {e}")
-
 if __name__ == '__main__':
-    port = int(os.getenv('PORT', 5000))
-    debug = os.getenv('FLASK_ENV') != 'production'
+    # Initialize MongoDB
+    try:
+        from mongo_setup import setup_database
+        setup_database()
+    except Exception as e:
+        print(f"MongoDB setup warning: {e}")
+        print("Make sure MongoDB is running on localhost:27017")
     
-    if debug:
-        print("\n" + "="*50)
-        print("MongoDB Berliner Gespräche Server starting...")
-        print("Database: MongoDB (berliner_gespraeche)")
-        print("For mobile access, use your network IP:")
-        
-        import socket
-        try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect(("8.8.8.8", 80))
-            network_ip = s.getsockname()[0]
-            s.close()
-            print(f"   http://{network_ip}:{port}")
-        except:
-            print("   Network IP detection failed")
-        
-        print(f"For local access: http://localhost:{port}")
-        print("="*50 + "\n")
+    print("\n" + "="*50)
+    print("MongoDB Berliner Gespräche Server starting...")
+    print("Database: MongoDB (berliner_gespraeche)")
+    print("For mobile access, use your network IP:")
     
-    app.run(debug=debug, host='0.0.0.0', port=port)
+    import socket
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        network_ip = s.getsockname()[0]
+        s.close()
+        print(f"   http://{network_ip}:5000")
+    except:
+        print("   Network IP detection failed")
+    
+    print("For local access: http://localhost:5000")
+    print("="*50 + "\n")
+    
+    app.run(debug=True, host='0.0.0.0', port=5000)
