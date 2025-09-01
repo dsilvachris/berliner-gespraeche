@@ -11,39 +11,56 @@ class MongoConfig:
     # MongoDB connection settings
     MONGO_URI = os.getenv('MONGODB_URI', 'mongodb://localhost:27017/')
     DATABASE_NAME = os.getenv('MONGO_DB_NAME', 'berliner_gespraeche')
+    _client = None
+    _db = None
     
     @staticmethod
     def get_database():
-        """Get MongoDB database connection"""
-        uri = MongoConfig.MONGO_URI
-        # Handle URL encoding for special characters in password
-        if 'mongodb+srv://' in uri and '@' in uri:
+        """Get MongoDB database connection with lazy initialization"""
+        if MongoConfig._db is None:
             try:
-                # Extract and encode credentials if needed
-                parts = uri.split('://', 1)[1]
-                if '@' in parts:
-                    creds, rest = parts.split('@', 1)
-                    if ':' in creds:
-                        user, password = creds.split(':', 1)
-                        # Re-encode the password to handle special characters
-                        encoded_password = quote_plus(password)
-                        uri = f"mongodb+srv://{user}:{encoded_password}@{rest}"
-            except:
-                pass  # Use original URI if parsing fails
-        
-        # SSL/TLS configuration for Atlas
-        client = MongoClient(
-            uri,
-            tls=True,
-            tlsAllowInvalidCertificates=False,
-            serverSelectionTimeoutMS=30000,
-            connectTimeoutMS=30000,
-            socketTimeoutMS=30000
-        )
-        return client[MongoConfig.DATABASE_NAME]
+                uri = MongoConfig.MONGO_URI
+                
+                # Handle URL encoding for special characters in password
+                if 'mongodb+srv://' in uri and '@' in uri:
+                    try:
+                        parts = uri.split('://', 1)[1]
+                        if '@' in parts:
+                            creds, rest = parts.split('@', 1)
+                            if ':' in creds:
+                                user, password = creds.split(':', 1)
+                                encoded_password = quote_plus(password)
+                                uri = f"mongodb+srv://{user}:{encoded_password}@{rest}"
+                    except:
+                        pass
+                
+                # Optimized connection settings for Render
+                MongoConfig._client = MongoClient(
+                    uri,
+                    serverSelectionTimeoutMS=5000,
+                    connectTimeoutMS=5000,
+                    socketTimeoutMS=5000,
+                    maxPoolSize=10,
+                    retryWrites=True
+                )
+                
+                # Test connection
+                MongoConfig._client.admin.command('ping')
+                MongoConfig._db = MongoConfig._client[MongoConfig.DATABASE_NAME]
+                print("MongoDB connected successfully")
+                
+            except Exception as e:
+                print(f"MongoDB connection failed: {e}")
+                # Return None to handle gracefully in application
+                return None
+                
+        return MongoConfig._db
 
-# Global database instance
-db = MongoConfig.get_database()
+# Lazy database instance
+def get_db():
+    return MongoConfig.get_database()
+
+db = None  # Will be initialized on first use
 
 # Collection names
 COLLECTIONS = {

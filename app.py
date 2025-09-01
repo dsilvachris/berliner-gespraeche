@@ -298,8 +298,13 @@ def contact_info():
                 first_initiative = list(INITIATIVES_DATA[district][init_type].keys())[0]
                 selected_initiatives.append(first_initiative)
     
-    # Store contact info in database for QR access
-    contact_id = ContactShareService.create_contact_share(district, selected_initiatives)
+    # Store contact info in database for QR access (with error handling)
+    try:
+        contact_id = ContactShareService.create_contact_share(district, selected_initiatives)
+    except Exception as e:
+        print(f"Database error: {e}")
+        # Generate a temporary ID for QR code
+        contact_id = f"temp_{district}_{len(selected_initiatives)}"
     
     # Get detailed initiative info for display on page
     initiative_details = []
