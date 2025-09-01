@@ -18,8 +18,12 @@ Ein mobiles/web-basiertes Tool zur Dokumentation von Gesprächen zwischen Bürge
 pip install -r requirements.txt
 ```
 
-2. **Datenbank erstellen** (optional):
+2. **MongoDB starten** und **Datenbank initialisieren**:
 ```bash
+# MongoDB starten (Windows)
+net start MongoDB
+
+# Datenbank initialisieren
 python database_setup.py
 ```
 
@@ -30,7 +34,7 @@ python app.py
 
 4. **Browser öffnen**: http://localhost:5000
 
-*Die SQLite-Datenbank wird automatisch beim ersten Start erstellt.*
+*MongoDB muss lokal installiert und gestartet sein. Die Datenbank wird beim ersten Setup initialisiert.*
 
 ## Verwendung
 
@@ -50,7 +54,7 @@ python app.py
 - **Backend**: Python Flask
 - **Frontend**: HTML/CSS/JavaScript
 - **QR-Code**: qrcode Library
-- **Datenspeicherung**: SQLite Datenbank (berliner_gespraeche.db)
+- **Datenspeicherung**: MongoDB Datenbank (berliner_gespraeche)
 
 ## Struktur
 
@@ -75,10 +79,10 @@ python app.py
 
 ## Nächste Schritte für Produktion
 
-1. ✅ Datenbank-Integration (SQLite)
+1. ✅ Datenbank-Integration (MongoDB)
 2. Benutzer-Authentifizierung
 3. Export-Funktionen (CSV/PDF)
 4. Erweiterte Analytics
 5. Mobile App (React Native/Flutter)
-6. PostgreSQL für Produktion
+6. MongoDB Atlas für Cloud-Deployment
 7. SSL/HTTPS Konfiguration
