@@ -722,8 +722,8 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     print("\n" + "="*50)
-    print("🌐 Server starting...")
-    print("📱 For mobile access, use your network IP:")
+    print("Server starting...")
+    print("For mobile access, use your network IP:")
     
     import socket
     try:
@@ -735,7 +735,7 @@ if __name__ == '__main__':
     except:
         print("   Network IP detection failed")
     
-    print("💻 For local access: http://localhost:5000")
+    print("For local access: http://localhost:5000")
     print("="*50 + "\n")
     
     app.run(debug=True, host='0.0.0.0', port=5000)
