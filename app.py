@@ -353,14 +353,18 @@ def contact_info():
 @app.route('/public_contact/<contact_id>')
 def public_contact(contact_id):
     # Get contact info from database
-    contact_share = ContactShareService.get_contact_share(contact_id)
+    try:
+        contact_share = ContactShareService.get_contact_share(contact_id)
+    except Exception as e:
+        print(f"Database error in public_contact: {e}")
+        contact_share = None
     
     if not contact_share:
         return render_template('contact_info.html', 
                              initiative_details=[],
                              district='Unknown',
                              qr_code=None,
-                             error="Contact information not found",
+                             error="Contact information not found or database unavailable",
                              public_view=True)
     
     selected_initiatives = contact_share.get('initiatives', [])
@@ -479,15 +483,22 @@ def review_post():
 
 @app.route('/complete')
 def complete_dialogue():
-    # Get admin user
-    admin_user = UserService.get_or_create_admin()
-    
-    # Create dialogue using service layer
-    dialogue_id = DialogueService.create_dialogue(session, admin_user['_id'])
-    
-    # Store dialogue ID for PDF download
-    session.clear()
-    session['last_dialogue_id'] = str(dialogue_id)
+    try:
+        # Get admin user
+        admin_user = UserService.get_or_create_admin()
+        
+        # Create dialogue using service layer
+        dialogue_id = DialogueService.create_dialogue(session, admin_user['_id'])
+        
+        # Store dialogue ID for PDF download
+        session.clear()
+        session['last_dialogue_id'] = str(dialogue_id)
+        
+    except Exception as e:
+        print(f"Database error in complete_dialogue: {e}")
+        # Clear session anyway and continue without saving to database
+        session.clear()
+        session['last_dialogue_id'] = 'offline_mode'
     
     return render_template('thank_you.html')
 
@@ -496,7 +507,20 @@ def dashboard():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     
-    dashboard_data = DialogueService.get_dashboard_data()
+    try:
+        dashboard_data = DialogueService.get_dashboard_data()
+    except Exception as e:
+        print(f"Database error in dashboard: {e}")
+        # Fallback data when database is unavailable
+        dashboard_data = {
+            'total_dialogues': 0,
+            'total_partners': 0,
+            'total_duration': 0,
+            'dialogues': [],
+            'district_stats': [],
+            'theme_stats': [],
+            'error': 'Database temporarily unavailable'
+        }
     
     return render_template('dashboard.html', data=dashboard_data, dialogues=dashboard_data['dialogues'])
 
