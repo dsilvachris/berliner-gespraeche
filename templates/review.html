@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="progress">
+    <div class="progress-bar" style="width: 100%;"></div>
+</div>
+
+<div class="card">
+    <h1>📋 Antworten überprüfen</h1>
+    <p style="color: #666; margin-bottom: 30px;">Überprüfen Sie Ihre Antworten und bearbeiten Sie sie bei Bedarf.</p>
+    
+    <form method="POST" action="{{ url_for('review_post') }}">
+        <!-- Step 1 -->
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <h3>1. Lebenswerte Stadt</h3>
+            <textarea name="livable_city" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; min-height: 80px;">{{ session.get('livable_city', '') }}</textarea>
+            
+            <h4 style="margin-top: 20px;">Dialogpartner Interesse</h4>
+            <textarea name="partner_interest" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; min-height: 80px;">{{ session.get('partner_interest', '') }}</textarea>
+        </div>
+        
+        <!-- Step 2 -->
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <h3>2. Themen und Bezirk</h3>
+            <p><strong>Ausgewählte Themen:</strong> {{ session.get('topics', [])|join(', ') or 'Keine' }}</p>
+            <p><strong>Unterthemen:</strong> {{ session.get('subtopics', [])|join(', ') or 'Keine' }}</p>
+            
+            <h4>Notizen</h4>
+            <input type="text" name="notes" value="{{ session.get('notes', '') }}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            
+            <h4 style="margin-top: 15px;">Bezirk</h4>
+            <select name="district" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                <option value="">Bezirk auswählen</option>
+                {% for district in ['Mitte', 'Neukölln', 'Kreuzberg', 'Prenzlauer Berg', 'Charlottenburg', 'Friedrichshain', 'Schöneberg', 'Wedding', 'Tempelhof', 'Steglitz'] %}
+                <option value="{{ district }}" {% if session.get('district') == district %}selected{% endif %}>{{ district }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+
+        
+        <!-- Step 3 -->
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <h3>3. Initiativen</h3>
+            <p><strong>Interessensbereiche:</strong> {{ session.get('initiative_types', [])|join(', ') or 'Keine ausgewählt' }}</p>
+            <p><strong>Ausgewählte Initiativen:</strong> {{ session.get('selected_initiatives', [])|join(', ') or 'Keine ausgewählt' }}</p>
+        </div>
+        
+        <!-- Step 4 -->
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <h3>4. Kontaktdaten</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div>
+                    <label>Name:</label>
+                    <input type="text" name="name" value="{{ session.get('name', '') }}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div>
+                    <label>Nachname:</label>
+                    <input type="text" name="surname" value="{{ session.get('surname', '') }}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label>Email:</label>
+                    <input type="email" name="email" value="{{ session.get('email', '') }}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div>
+                    <label>Telefon:</label>
+                    <input type="tel" name="phone" value="{{ session.get('phone', '') }}" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+            </div>
+            <p style="margin-top: 15px;"><strong>Einverständnis:</strong> {{ 'Ja' if session.get('consent') == 'yes' else 'Nein' }}</p>
+            <p><strong>Datenschutz:</strong> {{ session.get('data_protection', 'Nicht angegeben') }}</p>
+        </div>
+        
+
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <button type="submit" class="btn" style="font-size: 18px; padding: 15px 30px;">
+                ✅ Bestätigen und abschließen
+            </button>
+            <a href="{{ url_for('step5') }}" class="btn btn-secondary" style="margin-left: 15px;">
+                ← Zurück zur Reflexion
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

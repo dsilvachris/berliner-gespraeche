@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="progress">
+    <div class="progress-bar" style="width: 20%;"></div>
+</div>
+
+<div class="card">
+    <h1>Schritt 1: Dialog-Essenz erfassen</h1>
+    
+    <form method="POST" action="{{ url_for('step1') }}">
+        <div style="margin: 30px 0;">
+            <label for="livable_city"><strong>Was macht für dich eine lebenswerte Stadt aus?</strong></label>
+            <textarea id="livable_city" name="livable_city" rows="4" maxlength="2000" placeholder="Beschreibe deine Vorstellung einer lebenswerten Stadt..." required></textarea>
+            <small style="color: #666;">Maximal 2000 Zeichen</small>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <label for="partner_interest"><strong>Was ist das Interesse des Dialogpartners?</strong></label>
+            <textarea id="partner_interest" name="partner_interest" rows="4" maxlength="2000" placeholder="Wofür interessiert sich dein Gesprächspartner?" required></textarea>
+            <small style="color: #666;">Maximal 2000 Zeichen</small>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <button type="submit" class="btn">Weiter →</button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.querySelectorAll('textarea').forEach(textarea => {
+    textarea.addEventListener('input', function() {
+        const remaining = this.maxLength - this.value.length;
+        const small = this.nextElementSibling;
+        small.textContent = `${remaining} Zeichen übrig`;
+        if (remaining < 100) small.style.color = '#f44336';
+        else small.style.color = '#666';
+    });
+});
+</script>
+{% endblock %}

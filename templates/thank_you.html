@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="text-align: center;">
+    <h1>🎉 Vielen Dank!</h1>
+    
+    <div style="font-size: 48px; margin: 30px 0;">
+        ✅
+    </div>
+    
+    <div style="margin: 30px 0;">
+        <h2>Dialog erfolgreich dokumentiert!</h2>
+        <p style="font-size: 18px; color: #666; margin: 20px 0;">
+            Dein Beitrag hilft dabei, Berlin lebenswerter zu machen.
+        </p>
+    </div>
+    
+    <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; margin: 30px 0;">
+        <h3>Was passiert als nächstes?</h3>
+        <ul style="text-align: left; margin: 15px 0;">
+            <li>Die ausgewählten Initiativen werden über dein Interesse informiert</li>
+            <li>Du erhältst bei Bedarf weitere Informationen per Email/WhatsApp</li>
+            <li>Deine Daten werden entsprechend deiner Datenschutz-Einstellungen behandelt</li>
+        </ul>
+    </div>
+    
+    <div style="margin: 40px 0;">
+        <button onclick="togglePepTalk()" class="btn" style="margin: 10px; background: #4CAF50;">
+            💬 Pep Talk (Output & Outcome)
+        </button>
+        <div id="pepTalkBox" style="display: none; margin: 20px auto; max-width: 600px; text-align: left; background: #f0f8ff; padding: 20px; border-radius: 10px; border: 2px solid #4CAF50;">
+            <p style="color: #333; line-height: 1.6;">
+                An optional AI-generated output at the end that gives a pep talk or summary – could include suggestions for improvement, focus areas, or next steps. Adds a thoughtful finishing touch
+            </p>
+        </div>
+    </div>
+    
+    <div style="margin: 40px 0;">
+        <button class="btn" style="margin: 10px; background: #2196F3;">
+            📧 Send my Response through Email
+        </button>
+        <a href="{{ url_for('download_dialogue_pdf') }}" class="btn" style="margin: 10px; background: #FF5722;">
+            📄 Dialog als PDF herunterladen
+        </a>
+    </div>
+    
+    <div style="margin: 40px 0;">
+        <a href="{{ url_for('index') }}" class="btn" style="margin: 10px;">
+            🏠 Zur Startseite
+        </a>
+        <a href="{{ url_for('start_dialogue') }}" class="btn btn-secondary" style="margin: 10px;">
+            💬 Neuen Dialog starten
+        </a>
+    </div>
+    
+    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd;">
+        <p style="color: #666;">
+            <strong>Sag doch mal, Berlin</strong> - Hören. Reden. Mitgestalten<br>
+            Für eine lebenswerte und klimafreundliche Stadt
+        </p>
+    </div>
+</div>
+
+<script>
+function togglePepTalk() {
+    const pepTalkBox = document.getElementById('pepTalkBox');
+    if (pepTalkBox.style.display === 'none') {
+        pepTalkBox.style.display = 'block';
+    } else {
+        pepTalkBox.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

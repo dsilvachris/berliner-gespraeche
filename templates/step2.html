@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="progress">
+    <div class="progress-bar" style="width: 40%;"></div>
+</div>
+
+<div class="card">
+    <h1>Schritt 2: Diskutierte Themen</h1>
+    
+    <form method="POST" action="{{ url_for('step2') }}">
+        <h3>Hauptthemen (mehrere auswählbar):</h3>
+        <div class="checkbox-group">
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Wohnen/Bauwende" style="display: none;">
+                <strong>🏠 Wohnen/Bauwende</strong>
+            </div>
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Mobilität" style="display: none;">
+                <strong>🚲 Mobilität</strong>
+            </div>
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Klimaanpassung" style="display: none;">
+                <strong>🌡️ Klimaanpassung</strong>
+            </div>
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Food" style="display: none;">
+                <strong>🍎 Food</strong>
+            </div>
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Building Transition" style="display: none;">
+                <strong>🔨 Building Transition</strong>
+            </div>
+            <div class="topic-card" onclick="toggleTopic(this)">
+                <input type="checkbox" name="topics" value="Heating Transition" style="display: none;">
+                <strong>🔥 Heating Transition</strong>
+            </div>
+        </div>
+        
+        <!-- Subtopics Section -->
+        <div id="subtopics-section" style="margin: 30px 0;">
+            <h3>Unterthemen (mindestens eines auswählen):</h3>
+            <div id="subtopics-container">
+                {% for topic, subtopics in subtopics_data.items() %}
+                <div style="margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px; color: #333;">{{ topic }}</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-left: 20px;">
+                        {% for subtopic in subtopics %}
+                        <div class="subtopic-card" onclick="toggleSubtopic(this)" style="padding: 8px 12px; background: #f0f0f0; border-radius: 5px; cursor: pointer; border: 2px solid transparent; font-size: 14px;">
+                            <input type="checkbox" name="subtopics" value="{{ subtopic }}" style="display: none;">
+                            {{ subtopic }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <label for="notes"><strong>Meine Notizen:</strong></label>
+            <textarea id="notes" name="notes" rows="3" maxlength="100" placeholder="Kurze Notizen zum Gespräch..."></textarea>
+            <small style="color: #666;">Maximal 100 Zeichen</small>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <label for="district"><strong>Bezirk:</strong></label>
+            <select id="district" name="district" required>
+                <option value="">Bezirk auswählen</option>
+                <option value="Mitte">Mitte</option>
+                <option value="Neukölln">Neukölln</option>
+                <option value="Kreuzberg">Kreuzberg</option>
+                <option value="Prenzlauer Berg">Prenzlauer Berg</option>
+                <option value="Charlottenburg">Charlottenburg</option>
+                <option value="Friedrichshain">Friedrichshain</option>
+                <option value="Schöneberg">Schöneberg</option>
+                <option value="Wedding">Wedding</option>
+                <option value="Tempelhof">Tempelhof</option>
+                <option value="Steglitz">Steglitz</option>
+            </select>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <button type="submit" class="btn" id="continueBtn" disabled>Weiter →</button>
+        </div>
+    </form>
+</div>
+
+<script>
+const subtopicsData = {{ subtopics_data|tojson }};
+
+
+function checkFormValid() {
+    const topics = document.querySelectorAll('input[name="topics"]:checked');
+    const subtopics = document.querySelectorAll('input[name="subtopics"]:checked');
+    const district = document.getElementById('district').value;
+    const notes = document.getElementById('notes').value;
+    
+    const continueBtn = document.getElementById('continueBtn');
+    continueBtn.disabled = !(topics.length > 0 && subtopics.length > 0 && district && notes.trim());
+}
+
+function toggleTopic(element) {
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    checkbox.checked = !checkbox.checked;
+    
+    if (checkbox.checked) {
+        element.classList.add('selected');
+        element.style.background = '#e8f5e8';
+        element.style.border = '2px solid #4CAF50';
+    } else {
+        element.classList.remove('selected');
+        element.style.background = '';
+        element.style.border = '';
+    }
+    
+    checkFormValid();
+}
+
+function updateSubtopics() {
+    console.log('Selected topics:', selectedTopics);
+    console.log('Subtopics data:', subtopicsData);
+    
+    const subtopicsSection = document.getElementById('subtopics-section');
+    const subtopicsContainer = document.getElementById('subtopics-container');
+    
+    if (selectedTopics.length === 0) {
+        subtopicsSection.style.display = 'none';
+        return;
+    }
+    
+    console.log('Showing subtopics section');
+    subtopicsSection.style.display = 'block';
+    subtopicsContainer.innerHTML = '';
+    
+    selectedTopics.forEach(topic => {
+        if (subtopicsData[topic]) {
+            const topicDiv = document.createElement('div');
+            topicDiv.style.marginBottom = '20px';
+            topicDiv.innerHTML = '<h4 style="margin-bottom: 10px; color: #333;">' + getTopicIcon(topic) + ' ' + topic + '</h4>';
+            
+            const subtopicsGrid = document.createElement('div');
+            subtopicsGrid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-left: 20px;';
+            
+            subtopicsData[topic].forEach(subtopic => {
+                const subtopicDiv = document.createElement('div');
+                subtopicDiv.style.cssText = 'padding: 8px 12px; background: #f0f0f0; border-radius: 5px; cursor: pointer; border: 2px solid transparent; font-size: 14px;';
+                subtopicDiv.onclick = function() { toggleSubtopic(subtopicDiv); };
+                
+                subtopicDiv.innerHTML = '<input type="checkbox" name="subtopics" value="' + subtopic + '" style="display: none;">' + subtopic;
+                
+                subtopicsGrid.appendChild(subtopicDiv);
+            });
+            
+            topicDiv.appendChild(subtopicsGrid);
+            subtopicsContainer.appendChild(topicDiv);
+        }
+    });
+}
+
+function toggleSubtopic(element) {
+    console.log('Subtopic clicked');
+    const checkbox = element.querySelector('input[type="checkbox"]');
+    console.log('Checkbox found:', checkbox);
+    
+    if (checkbox.checked) {
+        checkbox.checked = false;
+        element.style.border = '2px solid transparent';
+        element.style.background = '#f0f0f0';
+        console.log('Unchecked:', checkbox.value);
+    } else {
+        checkbox.checked = true;
+        element.style.border = '2px solid #4CAF50';
+        element.style.background = '#e8f5e8';
+        console.log('Checked:', checkbox.value);
+    }
+    
+    checkFormValid();
+}
+
+function getTopicIcon(topic) {
+    const icons = {
+        'Wohnen/Bauwende': '🏠',
+        'Mobilität': '🚲',
+        'Klimaanpassung': '🌡️',
+        'Food': '🍎',
+        'Building Transition': '🔨',
+        'Heating Transition': '🔥'
+    };
+    return icons[topic] || '📝';
+}
+
+document.querySelectorAll('input[name="topics"]').forEach(input => {
+    input.addEventListener('change', checkFormValid);
+});
+
+// Event listeners for subtopics will be added dynamically
+
+document.getElementById('district').addEventListener('change', checkFormValid);
+document.getElementById('notes').addEventListener('input', checkFormValid);
+
+document.getElementById('notes').addEventListener('input', function() {
+    const remaining = this.maxLength - this.value.length;
+    const small = this.nextElementSibling;
+    small.textContent = remaining + ' Zeichen übrig';
+    if (remaining < 20) small.style.color = '#f44336';
+    else small.style.color = '#666';
+});
+
+// Event listeners for subtopics
+document.querySelectorAll('input[name="subtopics"]').forEach(input => {
+    input.addEventListener('change', checkFormValid);
+});
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    checkFormValid();
+});
+</script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="text-align: center; padding: 40px;">
+    <!-- Slogan at the top -->
+    <div style="margin-bottom: 40px;">
+        <h1 style="font-size: 36px; margin-bottom: 10px; color: #333;">Sag doch mal, Berlin</h1>
+        <h2 style="font-size: 24px; color: #666; font-weight: normal; margin: 0;">Hören. Reden. Mitgestalten</h2>
+    </div>
+    
+    <!-- Logo in the middle -->
+    <div style="margin: 60px 0;">
+        <img src="{{ url_for('static', filename='logo.svg') }}" alt="Klimaneustart Berlin Logo" style="max-width: 300px; height: auto; border-radius: 10px;">
+    </div>
+    
+    <!-- Description -->
+    <div style="margin: 40px 0;">
+        <p style="font-size: 18px; color: #666; margin: 20px 0; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Dokumentiere Gespräche zwischen Bürgern und Facilitatoren über die Verbesserung der Lebensqualität in Berlin.
+        </p>
+    </div>
+    
+    <!-- Dialog button at the bottom -->
+    <div style="margin-top: 50px;">
+        <a href="{{ url_for('start_dialogue') }}" class="btn" style="font-size: 20px; padding: 15px 30px; background: #FF3333;">
+            🚀 Dialog starten
+        </a>
+    </div>
+</div>
+
+<div class="card" style="text-align: center;">
+    <h3>Für Notiz-Macher</h3>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+        📊 Dashboard anzeigen
+    </a>
+    <a href="{{ url_for('logout') }}" class="btn" style="background: #f44336; margin-top: 10px;">
+        🚪 Abmelden
+    </a>
+</div>
+{% endblock %}

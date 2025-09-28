@@ -1,0 +1,7 @@
+Flask
+pymongo
+qrcode
+Pillow
+pandas
+openpyxl
+reportlab

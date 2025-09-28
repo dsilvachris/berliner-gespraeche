@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="progress">
+    <div class="progress-bar" style="width: 65%;"></div>
+</div>
+
+<div class="card">
+    <h1 style="text-align: center;">📞 Kontaktinformationen</h1>
+    <p style="color: #666; margin-bottom: 30px; text-align: center;">Bezirk: <strong>{{ district }}</strong></p>
+    
+    <div style="background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0;">
+        <h3>🌱 Ausgewählte Initiativen:</h3>
+        
+        {% if initiative_details %}
+            {% for initiative in initiative_details %}
+            <div style="background: white; margin: 15px 0; padding: 20px; border-radius: 8px; border-left: 4px solid #4CAF50;">
+                <h4 style="margin: 0 0 15px 0; color: #2E7D32; font-size: 18px;">{{ initiative.name }}</h4>
+                
+                <div style="margin: 10px 0;">
+                    <strong>📞 Kontakt:</strong>
+                    <p style="margin: 5px 0; color: #333;">{{ initiative.contact }}</p>
+                </div>
+                
+                <div style="margin: 15px 0;">
+                    <strong>📝 Beschreibung:</strong>
+                    <p style="margin: 5px 0; color: #555; line-height: 1.5;">{{ initiative.summary }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #999; text-align: center;">Keine Initiativen ausgewählt</p>
+        {% endif %}
+        
+        <div style="background: #e3f2fd; margin: 25px 0; padding: 20px; border-radius: 8px; border-left: 4px solid #1976D2;">
+            <h4 style="margin: 0 0 15px 0; color: #1565C0; font-size: 18px;">🌍 Koordination: Klimaneustart Berlin</h4>
+            
+            <div style="margin: 10px 0;">
+                <strong>📞 Kontakt:</strong>
+                <p style="margin: 5px 0; color: #333;">
+                    📧 info@klimaneustart.de<br>
+                    📱 +49 30 12345678<br>
+                    🌐 www.klimaneustart.de
+                </p>
+            </div>
+            
+            <div style="margin: 15px 0;">
+                <strong>📝 Über uns:</strong>
+                <p style="margin: 5px 0; color: #555; line-height: 1.5;">
+                    Zentrale Anlaufstelle für Klimaschutz-Initiativen in Berlin. 
+                    Vernetzt lokale Projekte und fördert nachhaltigen Wandel in der Stadt.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    {% if not public_view %}
+    <!-- QR Code Section -->
+    <div style="text-align: center; margin: 30px 0; background: #fff3e0; padding: 20px; border-radius: 10px;">
+        <h3>📱 QR-Code für mobile Nutzung</h3>
+        {% if qr_code %}
+        <div style="margin: 20px 0;">
+            <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code" style="border: 2px solid #ddd; border-radius: 10px; max-width: 200px;">
+        </div>
+        <p style="color: #666; font-size: 14px;">Scanne den QR-Code um diese Seite auf dem Handy zu öffnen</p>
+        {% if contact_url %}
+        <p style="color: #888; font-size: 12px; margin-top: 10px;">Link: {{ contact_url }}</p>
+        {% endif %}
+        {% endif %}
+    </div>
+    {% endif %}
+    
+    <div style="text-align: center; margin-top: 40px;">
+        {% if not public_view %}
+        <a href="{{ url_for('step3') }}" class="btn btn-secondary" style="margin-right: 15px;">← Zurück zu Schritt 3</a>
+        <a href="{{ url_for('step4') }}" class="btn">Weiter zu Schritt 4 →</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
