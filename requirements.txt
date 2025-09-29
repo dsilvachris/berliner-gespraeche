@@ -1,7 +1,8 @@
 Flask
-pymongo
+psycopg2-binary
 qrcode
 Pillow
 pandas
 openpyxl
 reportlab
+python-dotenv

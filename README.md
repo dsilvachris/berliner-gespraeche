@@ -18,13 +18,15 @@ Ein mobiles/web-basiertes Tool zur Dokumentation von Gesprächen zwischen Bürge
 pip install -r requirements.txt
 ```
 
-2. **MongoDB starten** und **Datenbank initialisieren**:
+2. **PostgreSQL Setup**:
 ```bash
-# MongoDB starten (Windows)
-net start MongoDB
+# PostgreSQL starten und Datenbank erstellen
+psql -U postgres
+CREATE DATABASE berliner_gespraeche;
+\q
 
-# Datenbank initialisieren
-python database_setup.py
+# Umgebungsvariablen kopieren (optional)
+cp .env.example .env
 ```
 
 3. **Anwendung starten**:
@@ -34,7 +36,7 @@ python app.py
 
 4. **Browser öffnen**: http://localhost:5000
 
-*MongoDB muss lokal installiert und gestartet sein. Die Datenbank wird beim ersten Setup initialisiert.*
+*PostgreSQL muss lokal installiert sein. Die Datenbank-Tabellen werden automatisch erstellt.*
 
 ## Verwendung
 
@@ -54,13 +56,13 @@ python app.py
 - **Backend**: Python Flask
 - **Frontend**: HTML/CSS/JavaScript
 - **QR-Code**: qrcode Library
-- **Datenspeicherung**: MongoDB Datenbank (berliner_gespraeche)
+- **Datenspeicherung**: PostgreSQL Datenbank (berliner_gespraeche)
 
 ## Struktur
 
 ```
 ├── app.py              # Haupt-Flask-Anwendung
-├── database_setup.py   # Datenbank-Setup-Script
+├── database.py         # PostgreSQL Datenbank-Setup
 ├── requirements.txt    # Python-Abhängigkeiten
 ├── .env.example        # Umgebungsvariablen-Beispiel
 ├── templates/          # HTML-Templates
@@ -79,10 +81,10 @@ python app.py
 
 ## Nächste Schritte für Produktion
 
-1. ✅ Datenbank-Integration (MongoDB)
+1. ✅ Datenbank-Integration (PostgreSQL)
 2. Benutzer-Authentifizierung
 3. Export-Funktionen (CSV/PDF)
 4. Erweiterte Analytics
 5. Mobile App (React Native/Flutter)
-6. MongoDB Atlas für Cloud-Deployment
+6. Cloud PostgreSQL Deployment
 7. SSL/HTTPS Konfiguration
